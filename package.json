@@ -13,7 +13,7 @@
     },
     "author": "Alexandre Stahmer <alexandre.stahmer@gmail.com>",
     "engines": {
-        "node": ">=18.16.0"
+        "node": ">=24.4.1"
     },
     "scripts": {
         "dev": "preconstruct watch",
