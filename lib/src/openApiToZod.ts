@@ -201,13 +201,16 @@ export function getZodSchema({ schema: $schema, ctx, meta: inheritedMeta, option
                 .with("integer", () => "z.number()")
                 .with("string", () => {
                     // For string types with format, use the new Zod v4 top-level format methods
-                    if (schema.format && ["email", "hostname", "uri", "uuid", "date-time"].includes(schema.format)) {
+                    if (schema.format && ["email", "hostname", "uri", "uri-reference", "uuid", "date-time", "date", "time"].includes(schema.format)) {
                         return match(schema.format)
                             .with("email", () => "z.email()")
                             .with("hostname", () => "z.url()")
                             .with("uri", () => "z.url()")
+                            .with("uri-reference", () => "z.url()")
                             .with("uuid", () => "z.uuid()")
                             .with("date-time", () => "z.iso.datetime()")
+                            .with("date", () => "z.iso.date()")
+                            .with("time", () => "z.iso.time()")
                             .otherwise(() => "z.string()");
                     }
                     
@@ -412,7 +415,7 @@ const getZodChainableStringValidations = (schema: SchemaObject) => {
 
     if (schema.format) {
         // Skip format validations that are now handled at the top level in Zod v4
-        const topLevelFormats = ["email", "hostname", "uri", "uuid", "date-time"];
+        const topLevelFormats = ["email", "hostname", "uri", "uri-reference", "uuid", "date-time", "date", "time"];
         if (!topLevelFormats.includes(schema.format)) {
             const chain = match(schema.format)
                 .with("date-time", () => "datetime({ offset: true })")
