@@ -198,7 +198,14 @@ export function getZodSchema({ schema: $schema, ctx, meta: inheritedMeta, option
 
         return code.assign(
             match(schemaType)
-                .with("integer", () => "z.number()")
+                .with("integer", () => {
+                    // For integer types with format, use the appropriate Zod v4 integer methods
+                    if (schema.format === "int64") {
+                        return "z.bigint()";
+                    }
+                    return "z.int()";
+                })
+                .with("number", () => "z.number()")
                 .with("string", () => {
                     // For string types with format, use the new Zod v4 top-level format methods
                     if (schema.format && ["email", "hostname", "uri", "uri-reference", "uuid", "date-time", "date", "time", "emoji", "base64", "base64url", "nanoid", "cuid", "cuid2", "ulid", "ipv4", "ipv6", "cidrv4", "cidrv6", "duration"].includes(schema.format)) {
@@ -450,9 +457,8 @@ const getZodChainableNumberValidations = (schema: SchemaObject) => {
         return "";
     }
 
-    if (schema.type === "integer") {
-        validations.push("int()");
-    }
+    // Note: For integer types, we now use z.int() directly instead of z.number().int()
+    // So we don't need to add .int() here anymore
 
     if (schema.minimum !== undefined) {
         if (schema.exclusiveMinimum === true) {

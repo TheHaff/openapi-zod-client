@@ -77,7 +77,7 @@ test("validations", () => {
             },
         })
     ).toMatchInlineSnapshot(
-        '"z.looseObject({ str: z.string(), strWithLength: z.string().min(3).max(3), strWithMin: z.string().min(3), strWithMax: z.string().max(3), strWithPattern: z.string().regex(/^[a-z]+$/), strWithPatternWithSlash: z.string().regex(/abc\\/def\\/ghi/), email: z.email(), hostname: z.url(), url: z.url(), uuid: z.uuid(), date: z.iso.date(), time: z.iso.time(), uriReference: z.url(), emoji: z.emoji(), base64: z.base64(), base64url: z.base64url(), nanoid: z.nanoid(), cuid: z.cuid(), cuid2: z.cuid2(), ulid: z.ulid(), ipv4: z.ipv4(), ipv6: z.ipv6(), cidrv4: z.cidrv4(), cidrv6: z.cidrv6(), duration: z.iso.duration(), number: z.number(), int: z.number().int(), intWithMin: z.number().int().gte(3), intWithMax: z.number().int().lte(3), intWithMinAndMax: z.number().int().gte(3).lte(3), intWithExclusiveMinTrue: z.number().int().gt(3), intWithExclusiveMinFalse: z.number().int().gte(3), intWithExclusiveMin: z.number().int().gt(3), intWithExclusiveMaxTrue: z.number().int().lt(3), intWithExclusiveMaxFalse: z.number().int().lte(3), intWithExclusiveMax: z.number().int().lt(3), intWithMultipleOf: z.number().int().multipleOf(3), bool: z.boolean(), array: z.array(z.string()), arrayWithMin: z.array(z.string()).min(3), arrayWithMax: z.array(z.string()).max(3), arrayWithFormat: z.array(z.uuid()), object: z.looseObject({ str: z.string() }), objectWithRequired: z.looseObject({ str: z.string() }), oneOf: z.union([z.string(), z.number()]), anyOf: z.union([z.string(), z.number()]), allOf: z.string().and(z.number()), nested: z.record(z.number()), nestedNullable: z.record(z.number().nullable()) })"'
+        '"z.looseObject({ str: z.string(), strWithLength: z.string().min(3).max(3), strWithMin: z.string().min(3), strWithMax: z.string().max(3), strWithPattern: z.string().regex(/^[a-z]+$/), strWithPatternWithSlash: z.string().regex(/abc\\/def\\/ghi/), email: z.email(), hostname: z.url(), url: z.url(), uuid: z.uuid(), date: z.iso.date(), time: z.iso.time(), uriReference: z.url(), emoji: z.emoji(), base64: z.base64(), base64url: z.base64url(), nanoid: z.nanoid(), cuid: z.cuid(), cuid2: z.cuid2(), ulid: z.ulid(), ipv4: z.ipv4(), ipv6: z.ipv6(), cidrv4: z.cidrv4(), cidrv6: z.cidrv6(), duration: z.iso.duration(), number: z.number(), int: z.int(), intWithMin: z.int().gte(3), intWithMax: z.int().lte(3), intWithMinAndMax: z.int().gte(3).lte(3), intWithExclusiveMinTrue: z.int().gt(3), intWithExclusiveMinFalse: z.int().gte(3), intWithExclusiveMin: z.int().gt(3), intWithExclusiveMaxTrue: z.int().lt(3), intWithExclusiveMaxFalse: z.int().lte(3), intWithExclusiveMax: z.int().lt(3), intWithMultipleOf: z.int().multipleOf(3), bool: z.boolean(), array: z.array(z.string()), arrayWithMin: z.array(z.string()).min(3), arrayWithMax: z.array(z.string()).max(3), arrayWithFormat: z.array(z.uuid()), object: z.looseObject({ str: z.string() }), objectWithRequired: z.looseObject({ str: z.string() }), oneOf: z.union([z.string(), z.number()]), anyOf: z.union([z.string(), z.number()]), allOf: z.string().and(z.number()), nested: z.record(z.number()), nestedNullable: z.record(z.number().nullable()) })"'
     );
 });
 
@@ -252,4 +252,40 @@ test("openapi string formats", () => {
             },
         })
     ).toMatchInlineSnapshot('"z.iso.duration()"');
+});
+
+test("openapi number formats", () => {
+    expect(
+        getZodSchema({
+            schema: {
+                type: "number",
+            },
+        })
+    ).toMatchInlineSnapshot('"z.number()"');
+
+    expect(
+        getZodSchema({
+            schema: {
+                type: "integer",
+            },
+        })
+    ).toMatchInlineSnapshot('"z.int()"');
+
+    expect(
+        getZodSchema({
+            schema: {
+                type: "integer",
+                format: "int32",
+            },
+        })
+    ).toMatchInlineSnapshot('"z.int()"');
+
+    expect(
+        getZodSchema({
+            schema: {
+                type: "integer",
+                format: "int64",
+            },
+        })
+    ).toMatchInlineSnapshot('"z.bigint()"');
 });
