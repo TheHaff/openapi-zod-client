@@ -63,7 +63,7 @@ test("param-with-content", async () => {
       "import { makeApi, Zodios, type ZodiosOptions } from "@zodios/core";
       import { z } from "zod";
 
-      const test3 = z.object({ text3: z.boolean() }).partial().passthrough();
+      const test3 = z.looseObject({ text3: z.boolean() }).partial();
 
       export const schemas = {
         test3,
@@ -83,20 +83,12 @@ test("param-with-content", async () => {
             {
               name: "thing",
               type: "Query",
-              schema: z
-                .object({ text1: z.string() })
-                .partial()
-                .passthrough()
-                .optional(),
+              schema: z.looseObject({ text1: z.string() }).partial().optional(),
             },
             {
               name: "wrong param",
               type: "Query",
-              schema: z
-                .object({ text2: z.number() })
-                .partial()
-                .passthrough()
-                .optional(),
+              schema: z.looseObject({ text2: z.number() }).partial().optional(),
             },
             {
               name: "Accept-Language",
@@ -109,7 +101,7 @@ test("param-with-content", async () => {
               schema: z.unknown().optional(),
             },
           ],
-          response: z.object({ text3: z.boolean() }).partial().passthrough(),
+          response: z.looseObject({ text3: z.boolean() }).partial(),
         },
       ]);
 

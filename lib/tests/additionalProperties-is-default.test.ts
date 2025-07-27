@@ -10,7 +10,7 @@ describe("additional-properties", () => {
             },
         });
 
-        expect(schema).toMatchInlineSnapshot('"z.object({}).partial().passthrough()"');
+        expect(schema).toMatchInlineSnapshot('"z.looseObject({}).partial()"');
     });
 
     test("additionalProperties is true", () => {
@@ -21,7 +21,7 @@ describe("additional-properties", () => {
             },
         });
 
-        expect(schema).toMatchInlineSnapshot('"z.object({}).partial().passthrough()"');
+        expect(schema).toMatchInlineSnapshot('"z.looseObject({}).partial()"');
     });
 
     test("additionalProperties is empty object", () => {
@@ -33,7 +33,7 @@ describe("additional-properties", () => {
             },
         });
 
-        expect(schema).toMatchInlineSnapshot('"z.object({}).partial().passthrough()"');
+        expect(schema).toMatchInlineSnapshot('"z.looseObject({}).partial()"');
     });
 
     test("additional properties opt-out", () => {
@@ -59,7 +59,7 @@ describe("additional-properties", () => {
         });
 
         expect(schema).toMatchInlineSnapshot(
-            '"z.object({ foo: z.string(), bar: z.number() }).partial().passthrough()"'
+            '"z.looseObject({ foo: z.string(), bar: z.number() }).partial()"'
         );
     });
 });

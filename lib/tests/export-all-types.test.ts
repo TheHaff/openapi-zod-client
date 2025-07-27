@@ -103,12 +103,12 @@ describe("export-all-types", () => {
 
         expect(data).toEqual({
             schemas: {
-                Settings: "z.object({ theme_color: z.string(), features: Features.min(1) }).partial().passthrough()",
-                Author: "z.object({ name: z.union([z.string(), z.number()]).nullable(), title: Title.min(1).max(30), id: Id, mail: z.string(), settings: Settings }).partial().passthrough()",
+                Settings: "z.looseObject({ theme_color: z.string(), features: Features.min(1) }).partial()",
+                Author: "z.looseObject({ name: z.union([z.string(), z.number()]).nullable(), title: Title.min(1).max(30), id: Id, mail: z.string(), settings: Settings }).partial()",
                 Features: "z.array(z.string())",
-                Song: "z.object({ name: z.string(), duration: z.number() }).partial().passthrough()",
+                Song: "z.looseObject({ name: z.string(), duration: z.number() }).partial()",
                 Playlist:
-                    "z.object({ name: z.string(), author: Author, songs: z.array(Song) }).partial().passthrough().and(Settings)",
+                    "z.looseObject({ name: z.string(), author: Author, songs: z.array(Song) }).partial().and(Settings)",
                 Title: "z.string()",
                 Id: "z.number()",
             },
@@ -120,7 +120,7 @@ describe("export-all-types", () => {
                     description: undefined,
                     parameters: [],
                     errors: [],
-                    response: "z.object({ playlist: Playlist, by_author: Author }).partial().passthrough()",
+                    response: "z.looseObject({ playlist: Playlist, by_author: Author }).partial()",
                 },
             ],
             types: {
@@ -202,27 +202,23 @@ describe("export-all-types", () => {
           const Id = z.number();
           const Features = z.array(z.string());
           const Settings: z.ZodType<Settings> = z
-            .object({ theme_color: z.string(), features: Features.min(1) })
-            .partial()
-            .passthrough();
+            .looseObject({ theme_color: z.string(), features: Features.min(1) })
+            .partial();
           const Author: z.ZodType<Author> = z
-            .object({
+            .looseObject({
               name: z.union([z.string(), z.number()]).nullable(),
               title: Title.min(1).max(30),
               id: Id,
               mail: z.string(),
               settings: Settings,
             })
-            .partial()
-            .passthrough();
+            .partial();
           const Song: z.ZodType<Song> = z
-            .object({ name: z.string(), duration: z.number() })
-            .partial()
-            .passthrough();
+            .looseObject({ name: z.string(), duration: z.number() })
+            .partial();
           const Playlist: z.ZodType<Playlist> = z
-            .object({ name: z.string(), author: Author, songs: z.array(Song) })
+            .looseObject({ name: z.string(), author: Author, songs: z.array(Song) })
             .partial()
-            .passthrough()
             .and(Settings);
 
           export const schemas = {
@@ -241,9 +237,8 @@ describe("export-all-types", () => {
               path: "/example",
               requestFormat: "json",
               response: z
-                .object({ playlist: Playlist, by_author: Author })
-                .partial()
-                .passthrough(),
+                .looseObject({ playlist: Playlist, by_author: Author })
+                .partial(),
             },
           ]);
 

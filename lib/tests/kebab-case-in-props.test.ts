@@ -12,5 +12,5 @@ test("kebab-case-in-props", () => {
                 },
             },
         })
-    ).toMatchInlineSnapshot('"z.object({ lowercase: z.string(), "kebab-case": z.number() }).partial().passthrough()"');
+    ).toMatchInlineSnapshot('"z.looseObject({ lowercase: z.string(), "kebab-case": z.number() }).partial()"');
 });

@@ -64,7 +64,7 @@ describe("anyOf behavior", () => {
         });
 
         expect(zodSchema).toMatchInlineSnapshot(
-            '"z.union([z.object({ age: z.number().int(), nickname: z.string().optional() }).passthrough(), z.object({ pet_type: z.enum(["Cat", "Dog"]), hunts: z.boolean().optional() }).passthrough()])"'
+            '"z.union([z.looseObject({ age: z.number().int(), nickname: z.string().optional() }), z.looseObject({ pet_type: z.enum(["Cat", "Dog"]), hunts: z.boolean().optional() })])"'
         );
 
         const validator = createValidator(zodSchema);
@@ -109,7 +109,7 @@ describe("anyOf behavior", () => {
         });
 
         expect(zodSchema).toMatchInlineSnapshot(
-            '"z.union([z.object({ age: z.number().int(), nickname: z.string().optional() }).passthrough(), z.object({ pet_type: z.enum(["Cat", "Dog"]), hunts: z.boolean().optional() }).passthrough(), z.number()])"'
+            '"z.union([z.looseObject({ age: z.number().int(), nickname: z.string().optional() }), z.looseObject({ pet_type: z.enum(["Cat", "Dog"]), hunts: z.boolean().optional() }), z.number()])"'
         );
 
         const validator = createValidator(zodSchema);
@@ -158,7 +158,7 @@ describe("anyOf behavior", () => {
         });
 
         expect(zodSchema).toMatchInlineSnapshot(
-            '"z.union([z.union([z.number(), z.boolean()]), z.object({ age: z.number().int(), nickname: z.string().optional() }).passthrough(), z.object({ pet_type: z.enum(["Cat", "Dog"]), hunts: z.boolean().optional() }).passthrough(), z.string()])"'
+            '"z.union([z.union([z.number(), z.boolean()]), z.looseObject({ age: z.number().int(), nickname: z.string().optional() }), z.looseObject({ pet_type: z.enum(["Cat", "Dog"]), hunts: z.boolean().optional() }), z.string()])"'
         );
 
         const validator = createValidator(zodSchema);
@@ -232,12 +232,14 @@ describe("anyOf behavior", () => {
           "import { makeApi, Zodios, type ZodiosOptions } from "@zodios/core";
           import { z } from "zod";
 
-          const PetByAge = z
-            .object({ age: z.number().int(), nickname: z.string().optional() })
-            .passthrough();
-          const PetByType = z
-            .object({ pet_type: z.enum(["Cat", "Dog"]), hunts: z.boolean().optional() })
-            .passthrough();
+          const PetByAge = z.looseObject({
+            age: z.number().int(),
+            nickname: z.string().optional(),
+          });
+          const PetByType = z.looseObject({
+            pet_type: z.enum(["Cat", "Dog"]),
+            hunts: z.boolean().optional(),
+          });
           const anyOfRef = z.union([PetByAge, PetByType]).optional();
 
           export const schemas = {

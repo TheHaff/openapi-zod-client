@@ -93,9 +93,9 @@ test("handle-refs-with-dots-in-name", async () => {
           },
           "schemaByName": {},
           "zodSchemaByName": {
-              "Aaa_bbb_CccDdd_eee_Fff_ggg_HhhIiii_jjj": "z.object({ aaa: z.string(), bbb: z.string() }).partial().passthrough()",
+              "Aaa_bbb_CccDdd_eee_Fff_ggg_HhhIiii_jjj": "z.looseObject({ aaa: z.string(), bbb: z.string() }).partial()",
               "Basic": "z.string()",
-              "Basic_Thing": "z.object({ thing: Aaa_bbb_CccDdd_eee_Fff_ggg_HhhIiii_jjj }).partial().passthrough()",
+              "Basic_Thing": "z.looseObject({ thing: Aaa_bbb_CccDdd_eee_Fff_ggg_HhhIiii_jjj }).partial()",
           },
       }
     `);
@@ -107,13 +107,11 @@ test("handle-refs-with-dots-in-name", async () => {
 
       const Basic = z.string();
       const Aaa_bbb_CccDdd_eee_Fff_ggg_HhhIiii_jjj = z
-        .object({ aaa: z.string(), bbb: z.string() })
-        .partial()
-        .passthrough();
+        .looseObject({ aaa: z.string(), bbb: z.string() })
+        .partial();
       const Basic_Thing = z
-        .object({ thing: Aaa_bbb_CccDdd_eee_Fff_ggg_HhhIiii_jjj })
-        .partial()
-        .passthrough();
+        .looseObject({ thing: Aaa_bbb_CccDdd_eee_Fff_ggg_HhhIiii_jjj })
+        .partial();
 
       export const schemas = {
         Basic,

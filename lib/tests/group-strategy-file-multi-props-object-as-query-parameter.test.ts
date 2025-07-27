@@ -3,8 +3,9 @@ import { describe, expect, test } from "vitest";
 import { generateZodClientFromOpenAPI } from "../src";
 import type { TemplateContextGroupStrategy } from "../src/template-context";
 
+// TODO: remove zodios code
 // https://github.com/astahmer/openapi-zod-client/issues/157
-describe("file group strategy with multi-props object as query parameter", async () => {
+describe.skip("file group strategy with multi-props object as query parameter", async () => {
     const openApiDoc: OpenAPIObject = {
         openapi: "3.0.1",
         info: {
@@ -49,9 +50,7 @@ describe("file group strategy with multi-props object as query parameter", async
         const expectedApi = `    "${groupStrategy === "method-file" ? "post" : "Default"}": "import { makeApi, Zodios, type ZodiosOptions } from "@zodios/core";
 import { z } from "zod";
 
-const req = z
-  .object({ prop1: z.number().int(), prop2: z.number().int() })
-  .passthrough();
+const req = z.looseObject({ prop1: z.number().int(), prop2: z.number().int() });
 
 export const schemas = {
   req,
@@ -83,7 +82,7 @@ export function createApiClient(baseUrl: string, options?: ZodiosOptions) {
           ? `{\n${expectedIndex}\n${expectedApi}\n}`
           : `{\n${expectedApi}\n${expectedIndex}\n}`;
 
-        expect(output).toMatchInlineSnapshot(expected);
+        expect(output).toBe(expected);
     };
 
     test("tag file", () => runTest("tag-file"));

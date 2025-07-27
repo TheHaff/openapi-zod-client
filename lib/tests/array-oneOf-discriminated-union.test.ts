@@ -61,8 +61,8 @@ test("array-oneOf-discriminated-union", async () => {
 
       const ArrayRequest = z.array(
         z.discriminatedUnion("type", [
-          z.object({ type: z.literal("a") }).passthrough(),
-          z.object({ type: z.literal("b") }).passthrough(),
+          z.looseObject({ type: z.literal("a") }),
+          z.looseObject({ type: z.literal("b") }),
         ])
       );
 

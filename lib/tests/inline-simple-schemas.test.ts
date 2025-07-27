@@ -126,9 +126,9 @@ test("inline-simple-schemas", async () => {
       import { z } from "zod";
 
       const BasicString = z.string();
-      const SimpleObject = z.object({ str: z.string() }).partial().passthrough();
+      const SimpleObject = z.looseObject({ str: z.string() }).partial();
       const ComplexObject = z
-        .object({
+        .looseObject({
           str: z.string(),
           strRef: BasicString,
           num: z.number(),
@@ -136,8 +136,7 @@ test("inline-simple-schemas", async () => {
           ref: SimpleObject,
           refArray: z.array(SimpleObject),
         })
-        .partial()
-        .passthrough();
+        .partial();
 
       export const schemas = {
         BasicString,
@@ -166,11 +165,11 @@ test("inline-simple-schemas", async () => {
             },
             {
               status: 403,
-              schema: z.object({ str: z.string() }).partial().passthrough(),
+              schema: z.looseObject({ str: z.string() }).partial(),
             },
             {
               status: 404,
-              schema: z.object({ str: z.string() }).partial().passthrough(),
+              schema: z.looseObject({ str: z.string() }).partial(),
             },
             {
               status: 405,
@@ -178,7 +177,7 @@ test("inline-simple-schemas", async () => {
             },
             {
               status: 406,
-              schema: z.array(z.object({ str: z.string() }).partial().passthrough()),
+              schema: z.array(z.looseObject({ str: z.string() }).partial()),
             },
             {
               status: 407,

@@ -11,7 +11,7 @@ test("strictObjects-option", () => {
                 },
             },
         })
-    ).toMatchInlineSnapshot('"z.object({ str: z.string() }).partial().passthrough()"');
+    ).toMatchInlineSnapshot('"z.looseObject({ str: z.string() }).partial()"');
     expect(
         getZodSchema({
             schema: {
@@ -24,5 +24,5 @@ test("strictObjects-option", () => {
                 strictObjects: true,
             },
         })
-    ).toMatchInlineSnapshot('"z.object({ str: z.string() }).partial().strict().passthrough()"');
+    ).toMatchInlineSnapshot('"z.strictObject({ str: z.string() }).partial()"');
 });

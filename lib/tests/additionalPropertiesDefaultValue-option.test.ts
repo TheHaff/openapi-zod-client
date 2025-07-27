@@ -11,7 +11,7 @@ test("additionalPropertiesDefaultValue-option", () => {
                 },
             },
         })
-    ).toMatchInlineSnapshot('"z.object({ str: z.string() }).partial().passthrough()"');
+    ).toMatchInlineSnapshot('"z.looseObject({ str: z.string() }).partial()"');
     expect(
         getZodSchema({
             schema: {
@@ -24,7 +24,7 @@ test("additionalPropertiesDefaultValue-option", () => {
                 additionalPropertiesDefaultValue: true
             }
         })
-    ).toMatchInlineSnapshot('"z.object({ str: z.string() }).partial().passthrough()"');
+    ).toMatchInlineSnapshot('"z.looseObject({ str: z.string() }).partial()"');
     expect(
         getZodSchema({
             schema: {
@@ -37,7 +37,7 @@ test("additionalPropertiesDefaultValue-option", () => {
                 additionalPropertiesDefaultValue: { type: "number" }
             }
         })
-    ).toMatchInlineSnapshot('"z.object({ str: z.string() }).partial().passthrough()"');
+    ).toMatchInlineSnapshot('"z.looseObject({ str: z.string() }).partial()"');
     expect(
         getZodSchema({
             schema: {

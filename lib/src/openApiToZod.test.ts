@@ -22,34 +22,34 @@ test("getSchemaAsZodString", () => {
     expect(getSchemaAsZodString({ type: "array", items: { type: "string" } })).toMatchInlineSnapshot(
         '"z.array(z.string())"'
     );
-    expect(getSchemaAsZodString({ type: "object" })).toMatchInlineSnapshot('"z.object({}).partial().passthrough()"');
+    expect(getSchemaAsZodString({ type: "object" })).toMatchInlineSnapshot('"z.looseObject({}).partial()"');
     expect(getSchemaAsZodString({ type: "object", properties: { str: { type: "string" } } })).toMatchInlineSnapshot(
-        '"z.object({ str: z.string() }).partial().passthrough()"'
+        '"z.looseObject({ str: z.string() }).partial()"'
     );
 
     expect(getSchemaAsZodString({ type: "object", properties: { str: { type: "string" } } })).toMatchInlineSnapshot(
-        '"z.object({ str: z.string() }).partial().passthrough()"'
+        '"z.looseObject({ str: z.string() }).partial()"'
     );
 
     expect(getSchemaAsZodString({ type: "object", properties: { nb: { type: "integer" } } })).toMatchInlineSnapshot(
-        '"z.object({ nb: z.number().int() }).partial().passthrough()"'
+        '"z.looseObject({ nb: z.number().int() }).partial()"'
     );
 
     expect(
         getSchemaAsZodString({ type: "object", properties: { pa: { type: "number", minimum: 0 } } })
-    ).toMatchInlineSnapshot('"z.object({ pa: z.number().gte(0) }).partial().passthrough()"');
+    ).toMatchInlineSnapshot('"z.looseObject({ pa: z.number().gte(0) }).partial()"');
 
     expect(
         getSchemaAsZodString({ type: "object", properties: { pa: { type: "number", minimum: 0, maximum: 100 } } })
-    ).toMatchInlineSnapshot('"z.object({ pa: z.number().gte(0).lte(100) }).partial().passthrough()"');
+    ).toMatchInlineSnapshot('"z.looseObject({ pa: z.number().gte(0).lte(100) }).partial()"');
 
     expect(
         getSchemaAsZodString({ type: "object", properties: { ml: { type: "string", minLength: 0 } } })
-    ).toMatchInlineSnapshot('"z.object({ ml: z.string().min(0) }).partial().passthrough()"');
+    ).toMatchInlineSnapshot('"z.looseObject({ ml: z.string().min(0) }).partial()"');
 
     expect(
         getSchemaAsZodString({ type: "object", properties: { dt: { type: "string", format: "date-time" } } })
-    ).toMatchInlineSnapshot('"z.object({ dt: z.string().datetime({ offset: true }) }).partial().passthrough()"');
+    ).toMatchInlineSnapshot('"z.looseObject({ dt: z.string().datetime({ offset: true }) }).partial()"');
 
     expect(
         getSchemaAsZodString({
@@ -66,7 +66,7 @@ test("getSchemaAsZodString", () => {
             },
         })
     ).toMatchInlineSnapshot(
-        '"z.object({ str: z.string(), nb: z.number(), nested: z.object({ nested_prop: z.boolean() }).partial().passthrough() }).partial().passthrough()"'
+        '"z.looseObject({ str: z.string(), nb: z.number(), nested: z.looseObject({ nested_prop: z.boolean() }).partial() }).partial()"'
     );
 
     expect(
@@ -79,7 +79,7 @@ test("getSchemaAsZodString", () => {
                 },
             },
         })
-    ).toMatchInlineSnapshot('"z.array(z.object({ str: z.string() }).partial().passthrough())"');
+    ).toMatchInlineSnapshot('"z.array(z.looseObject({ str: z.string() }).partial())"');
 
     expect(
         getSchemaAsZodString({
@@ -100,7 +100,7 @@ test("getSchemaAsZodString", () => {
                 union: { oneOf: [{ type: "string" }, { type: "number" }] },
             },
         })
-    ).toMatchInlineSnapshot('"z.object({ union: z.union([z.string(), z.number()]) }).partial().passthrough()"');
+    ).toMatchInlineSnapshot('"z.looseObject({ union: z.union([z.string(), z.number()]) }).partial()"');
 
     expect(
         getSchemaAsZodString({
@@ -137,7 +137,7 @@ test("getSchemaAsZodString", () => {
         })
     ).toMatchInlineSnapshot(`
       "
-                      z.discriminatedUnion("type", [z.object({ type: z.literal("a"), a: z.string() }).passthrough(), z.object({ type: z.literal("b"), b: z.string() }).passthrough()])
+                      z.discriminatedUnion("type", [z.looseObject({ type: z.literal("a"), a: z.string() }), z.looseObject({ type: z.literal("b"), b: z.string() })])
                   "
     `);
 
@@ -187,9 +187,9 @@ test("getSchemaAsZodString", () => {
 
         })
     ).toMatchInlineSnapshot(`
-    "
-                    z.discriminatedUnion("type", [z.object({ type: z.literal("a"), a: z.string() }).passthrough(), z.object({ type: z.literal("b"), b: z.string() }).passthrough()])
-                "
+      "
+                      z.discriminatedUnion("type", [z.looseObject({ type: z.literal("a"), a: z.string() }), z.looseObject({ type: z.literal("b"), b: z.string() })])
+                  "
     `);
 
     // returns z.union, when allOf has multiple objects
@@ -263,7 +263,7 @@ test("getSchemaAsZodString", () => {
             discriminator: { propertyName: "type" },
 
         })
-    ).toMatchInlineSnapshot('"z.union([z.object({ type: z.literal("a"), a: z.string() }).passthrough().and(z.object({ type: z.literal("c"), c: z.string() }).passthrough()), z.object({ type: z.literal("b"), b: z.string() }).passthrough().and(z.object({ type: z.literal("d"), d: z.string() }).passthrough())])"');
+    ).toMatchInlineSnapshot('"z.union([z.looseObject({ type: z.literal("a"), a: z.string() }).and(z.looseObject({ type: z.literal("c"), c: z.string() })), z.looseObject({ type: z.literal("b"), b: z.string() }).and(z.looseObject({ type: z.literal("d"), d: z.string() }))])"');
 
     expect(
         getSchemaAsZodString({
@@ -273,7 +273,7 @@ test("getSchemaAsZodString", () => {
             },
         })
     ).toMatchInlineSnapshot(
-        '"z.object({ anyOfExample: z.union([z.string(), z.number()]) }).partial().passthrough()"'
+        '"z.looseObject({ anyOfExample: z.union([z.string(), z.number()]) }).partial()"'
     );
 
     expect(
@@ -283,7 +283,7 @@ test("getSchemaAsZodString", () => {
                 intersection: { allOf: [{ type: "string" }, { type: "number" }] },
             },
         })
-    ).toMatchInlineSnapshot('"z.object({ intersection: z.string().and(z.number()) }).partial().passthrough()"');
+    ).toMatchInlineSnapshot('"z.looseObject({ intersection: z.string().and(z.number()) }).partial()"');
 
     expect(getSchemaAsZodString({ type: "string", enum: ["aaa", "bbb", "ccc"] })).toMatchInlineSnapshot(
         '"z.enum(["aaa", "bbb", "ccc"])"'
@@ -372,13 +372,13 @@ test("CodeMeta with ref", () => {
         ctx,
     });
     expect(code.toString()).toMatchInlineSnapshot(
-        '"z.object({ str: z.string(), reference: Example, inline: z.object({ nested_prop: z.boolean() }).partial().passthrough() }).partial().passthrough()"'
+        '"z.looseObject({ str: z.string(), reference: Example, inline: z.looseObject({ nested_prop: z.boolean() }).partial() }).partial()"'
     );
     expect(code.children).toMatchInlineSnapshot(`
       [
           "z.string()",
           "Example",
-          "z.object({ nested_prop: z.boolean() }).partial().passthrough()",
+          "z.looseObject({ nested_prop: z.boolean() }).partial()",
       ]
     `);
 });
@@ -430,13 +430,13 @@ test("CodeMeta with nested refs", () => {
         ctx,
     });
     expect(code.toString()).toMatchInlineSnapshot(
-        '"z.object({ str: z.string(), reference: ObjectWithArrayOfRef, inline: z.object({ nested_prop: z.boolean() }).partial().passthrough(), another: WithNested, basic: Basic, differentPropSameRef: Basic }).partial().passthrough()"'
+        '"z.looseObject({ str: z.string(), reference: ObjectWithArrayOfRef, inline: z.looseObject({ nested_prop: z.boolean() }).partial(), another: WithNested, basic: Basic, differentPropSameRef: Basic }).partial()"'
     );
     expect(code.children).toMatchInlineSnapshot(`
       [
           "z.string()",
           "ObjectWithArrayOfRef",
-          "z.object({ nested_prop: z.boolean() }).partial().passthrough()",
+          "z.looseObject({ nested_prop: z.boolean() }).partial()",
           "WithNested",
           "Basic",
           "Basic",
@@ -451,10 +451,10 @@ test("CodeMeta with nested refs", () => {
           },
           "schemaByName": {},
           "zodSchemaByName": {
-              "Basic": "z.object({ prop: z.string(), second: z.number() }).partial().passthrough()",
-              "DeepNested": "z.object({ deep: z.boolean() }).partial().passthrough()",
-              "ObjectWithArrayOfRef": "z.object({ exampleProp: z.string(), another: z.number(), link: z.array(WithNested), someReference: Basic }).partial().passthrough()",
-              "WithNested": "z.object({ nested: z.string(), nestedRef: DeepNested }).partial().passthrough()",
+              "Basic": "z.looseObject({ prop: z.string(), second: z.number() }).partial()",
+              "DeepNested": "z.looseObject({ deep: z.boolean() }).partial()",
+              "ObjectWithArrayOfRef": "z.looseObject({ exampleProp: z.string(), another: z.number(), link: z.array(WithNested), someReference: Basic }).partial()",
+              "WithNested": "z.looseObject({ nested: z.string(), nestedRef: DeepNested }).partial()",
           },
       }
     `);

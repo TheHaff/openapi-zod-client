@@ -52,7 +52,7 @@ test("request-body-ref", async () => {
       "import { makeApi, Zodios, type ZodiosOptions } from "@zodios/core";
       import { z } from "zod";
 
-      const PostPetsRequest = z.object({ id: z.string() }).partial().passthrough();
+      const PostPetsRequest = z.looseObject({ id: z.string() }).partial();
 
       export const schemas = {
         PostPetsRequest,
@@ -67,7 +67,7 @@ test("request-body-ref", async () => {
             {
               name: "body",
               type: "Body",
-              schema: z.object({ id: z.string() }).partial().passthrough(),
+              schema: z.looseObject({ id: z.string() }).partial(),
             },
           ],
           response: z.void(),

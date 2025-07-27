@@ -38,13 +38,12 @@ test("number-default-cast", async () => {
       import { z } from "zod";
 
       const test1 = z
-        .object({
+        .looseObject({
           text1: z.string().default("aaa"),
           shouldBeFixed: z.number().default(20),
           isFine: z.number().default(30),
         })
-        .partial()
-        .passthrough();
+        .partial();
 
       export const schemas = {
         test1,

@@ -290,8 +290,15 @@ export function getZodSchema({ schema: $schema, ctx, meta: inheritedMeta, option
         }
 
         const partial = isPartial ? ".partial()" : "";
-        const strict = options?.strictObjects ? ".strict()" : "";
-        return code.assign(`z.object(${properties})${partial}${strict}${additionalPropsSchema}${readonly}`);
+        // Object type selection for Zod 4
+        let zodObjectType = "object";
+        if (options?.strictObjects) {
+            zodObjectType = "strictObject";
+        } else if (additionalPropsSchema) {
+            zodObjectType = "looseObject";
+        }
+        // Use top-level object constructors
+        return code.assign(`z.${zodObjectType}(${properties})${partial}${readonly}`);
     }
 
     if (!schemaType) return code.assign("z.unknown()");

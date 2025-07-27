@@ -36,6 +36,6 @@ test("schema-refiner", () => {
             },
         })
     ).toMatchInlineSnapshot(
-        '"z.object({ name: z.string().nullable(), email: z.string().nullable() }).partial().passthrough()"'
+        '"z.looseObject({ name: z.string().nullable(), email: z.string().nullable() }).partial()"'
     );
 });

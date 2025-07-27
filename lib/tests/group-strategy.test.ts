@@ -570,23 +570,19 @@ test("group-strategy: tag-file with modified petstore schema", async () => {
           "__common": "import { z } from "zod";
 
       export const Category = z
-        .object({ id: z.number().int(), name: z.string() })
-        .partial()
-        .passthrough();
+        .looseObject({ id: z.number().int(), name: z.string() })
+        .partial();
       export const Tag = z
-        .object({ id: z.number().int(), name: z.string() })
-        .partial()
-        .passthrough();
-      export const Pet = z
-        .object({
-          id: z.number().int().optional(),
-          name: z.string(),
-          category: Category.optional(),
-          photoUrls: z.array(z.string()),
-          tags: z.array(Tag).optional(),
-          status: z.enum(["available", "pending", "sold"]).optional(),
-        })
-        .passthrough();
+        .looseObject({ id: z.number().int(), name: z.string() })
+        .partial();
+      export const Pet = z.looseObject({
+        id: z.number().int().optional(),
+        name: z.string(),
+        category: Category.optional(),
+        photoUrls: z.array(z.string()),
+        tags: z.array(Tag).optional(),
+        status: z.enum(["available", "pending", "sold"]).optional(),
+      });
       ",
           "__index": "export { PetApi } from "./pet";
       export { StoreApi } from "./store";
@@ -594,20 +590,23 @@ test("group-strategy: tag-file with modified petstore schema", async () => {
       ",
           "pet": "import { makeApi, Zodios, type ZodiosOptions } from "@zodios/core";
       import { z } from "zod";
-      
+
       import { Pet } from "./common";
       import { Category } from "./common";
       import { Tag } from "./common";
-      
+
       const ApiResponse = z
-        .object({ code: z.number().int(), type: z.string(), message: z.string() })
-        .partial()
-        .passthrough();
-      
+        .looseObject({
+          code: z.number().int(),
+          type: z.string(),
+          message: z.string(),
+        })
+        .partial();
+
       export const schemas = {
         ApiResponse,
       };
-      
+
       const endpoints = makeApi([
         {
           method: "put",
@@ -814,22 +813,22 @@ test("group-strategy: tag-file with modified petstore schema", async () => {
           response: ApiResponse,
         },
       ]);
-      
+
       export const PetApi = new Zodios(endpoints);
-      
+
       export function createApiClient(baseUrl: string, options?: ZodiosOptions) {
         return new Zodios(baseUrl, endpoints, options);
       }
       ",
           "store": "import { makeApi, Zodios, type ZodiosOptions } from "@zodios/core";
       import { z } from "zod";
-      
+
       import { Pet } from "./common";
       import { Category } from "./common";
       import { Tag } from "./common";
-      
+
       const Order = z
-        .object({
+        .looseObject({
           id: z.number().int(),
           petId: z.number().int(),
           quantity: z.number().int(),
@@ -838,13 +837,12 @@ test("group-strategy: tag-file with modified petstore schema", async () => {
           complete: z.boolean(),
           pet: Pet,
         })
-        .partial()
-        .passthrough();
-      
+        .partial();
+
       export const schemas = {
         Order,
       };
-      
+
       const endpoints = makeApi([
         {
           method: "get",
@@ -927,18 +925,18 @@ test("group-strategy: tag-file with modified petstore schema", async () => {
           ],
         },
       ]);
-      
+
       export const StoreApi = new Zodios(endpoints);
-      
+
       export function createApiClient(baseUrl: string, options?: ZodiosOptions) {
         return new Zodios(baseUrl, endpoints, options);
       }
       ",
           "user": "import { makeApi, Zodios, type ZodiosOptions } from "@zodios/core";
       import { z } from "zod";
-      
+
       const User = z
-        .object({
+        .looseObject({
           id: z.number().int(),
           username: z.string(),
           firstName: z.string(),
@@ -948,13 +946,12 @@ test("group-strategy: tag-file with modified petstore schema", async () => {
           phone: z.string(),
           userStatus: z.number().int(),
         })
-        .partial()
-        .passthrough();
-      
+        .partial();
+
       export const schemas = {
         User,
       };
-      
+
       const endpoints = makeApi([
         {
           method: "post",
@@ -1088,9 +1085,9 @@ test("group-strategy: tag-file with modified petstore schema", async () => {
           ],
         },
       ]);
-      
+
       export const UserApi = new Zodios(endpoints);
-      
+
       export function createApiClient(baseUrl: string, options?: ZodiosOptions) {
         return new Zodios(baseUrl, endpoints, options);
       }
@@ -1294,7 +1291,7 @@ test("group-strategy with complex schemas + split files", async () => {
                   "User": "common",
               },
               "schemas": {
-                  "Pet": "z.object({ id: z.number().int(), nickname: z.string(), owner: User }).partial().passthrough()",
+                  "Pet": "z.looseObject({ id: z.number().int(), nickname: z.string(), owner: User }).partial()",
               },
               "types": {},
           },
@@ -1412,7 +1409,7 @@ test("group-strategy with complex schemas + split files", async () => {
 
       export const User = z.lazy(() =>
         z
-          .object({
+          .looseObject({
             id: z.number().int(),
             firstname: z.string(),
             lastname: z.string(),
@@ -1420,22 +1417,20 @@ test("group-strategy with complex schemas + split files", async () => {
             friends: z.array(User),
           })
           .partial()
-          .passthrough()
       );
       export const Country = z.lazy(() =>
         z
-          .object({
+          .looseObject({
             id: z.number().int(),
             name: z.string(),
             code: z.string(),
             store_list: z.array(Store),
           })
           .partial()
-          .passthrough()
       );
       export const Store = z.lazy(() =>
         z
-          .object({
+          .looseObject({
             id: z.number().int(),
             name: z.string(),
             address: z.string(),
@@ -1443,7 +1438,6 @@ test("group-strategy with complex schemas + split files", async () => {
             owner: User,
           })
           .partial()
-          .passthrough()
       );
       ",
           "__index": "export { PetApi } from "./pet";
@@ -1457,9 +1451,8 @@ test("group-strategy with complex schemas + split files", async () => {
       import { User } from "./common";
 
       const Pet = z
-        .object({ id: z.number().int(), nickname: z.string(), owner: User })
-        .partial()
-        .passthrough();
+        .looseObject({ id: z.number().int(), nickname: z.string(), owner: User })
+        .partial();
 
       export const schemas = {
         Pet,

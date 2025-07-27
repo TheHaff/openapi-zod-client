@@ -85,7 +85,7 @@ describe("samples-generator", async () => {
                           schema: z.string().url(),
                       },
                   ],
-                  response: z.object({ subscriptionId: z.string() }).passthrough(),
+                  response: z.looseObject({ subscriptionId: z.string() }),
               },
           ]);
 
@@ -98,12 +98,11 @@ describe("samples-generator", async () => {
               "v3.0/link-example.": "import { makeApi, Zodios, type ZodiosOptions } from "@zodios/core";
           import { z } from "zod";
 
-          const user = z.object({ username: z.string(), uuid: z.string() }).partial().passthrough();
-          const repository = z.object({ slug: z.string(), owner: user }).partial().passthrough();
+          const user = z.looseObject({ username: z.string(), uuid: z.string() }).partial();
+          const repository = z.looseObject({ slug: z.string(), owner: user }).partial();
           const pullrequest = z
-              .object({ id: z.number().int(), title: z.string(), repository: repository, author: user })
-              .partial()
-              .passthrough();
+              .looseObject({ id: z.number().int(), title: z.string(), repository: repository, author: user })
+              .partial();
 
           export const schemas = {
               user,
@@ -236,9 +235,9 @@ describe("samples-generator", async () => {
               "v3.0/petstore-expanded.": "import { makeApi, Zodios, type ZodiosOptions } from "@zodios/core";
           import { z } from "zod";
 
-          const NewPet = z.object({ name: z.string(), tag: z.string().optional() }).passthrough();
-          const Pet = NewPet.and(z.object({ id: z.number().int() }).passthrough());
-          const Error = z.object({ code: z.number().int(), message: z.string() }).passthrough();
+          const NewPet = z.looseObject({ name: z.string(), tag: z.string().optional() });
+          const Pet = NewPet.and(z.looseObject({ id: z.number().int() }));
+          const Error = z.looseObject({ code: z.number().int(), message: z.string() });
 
           export const schemas = {
               NewPet,
@@ -324,9 +323,9 @@ describe("samples-generator", async () => {
               "v3.0/petstore.": "import { makeApi, Zodios, type ZodiosOptions } from "@zodios/core";
           import { z } from "zod";
 
-          const Pet = z.object({ id: z.number().int(), name: z.string(), tag: z.string().optional() }).passthrough();
+          const Pet = z.looseObject({ id: z.number().int(), name: z.string(), tag: z.string().optional() });
           const Pets = z.array(Pet);
-          const Error = z.object({ code: z.number().int(), message: z.string() }).passthrough();
+          const Error = z.looseObject({ code: z.number().int(), message: z.string() });
 
           export const schemas = {
               Pet,
@@ -379,29 +378,25 @@ describe("samples-generator", async () => {
           import { z } from "zod";
 
           const dataSetList = z
-              .object({
+              .looseObject({
                   total: z.number().int(),
                   apis: z.array(
                       z
-                          .object({
+                          .looseObject({
                               apiKey: z.string(),
                               apiVersionNumber: z.string(),
                               apiUrl: z.string(),
                               apiDocumentationUrl: z.string(),
                           })
                           .partial()
-                          .passthrough()
                   ),
               })
-              .partial()
-              .passthrough();
-          const perform_search_Body = z
-              .object({
-                  criteria: z.string().default("*:*"),
-                  start: z.number().int().optional().default(0),
-                  rows: z.number().int().optional().default(100),
-              })
-              .passthrough();
+              .partial();
+          const perform_search_Body = z.looseObject({
+              criteria: z.string().default("*:*"),
+              start: z.number().int().optional().default(0),
+              rows: z.number().int().optional().default(100),
+          });
 
           export const schemas = {
               dataSetList,
@@ -463,7 +458,7 @@ describe("samples-generator", async () => {
                           schema: z.string().default("oa_citations"),
                       },
                   ],
-                  response: z.array(z.record(z.object({}).partial().passthrough())),
+                  response: z.array(z.record(z.looseObject({}).partial())),
                   errors: [
                       {
                           status: 404,

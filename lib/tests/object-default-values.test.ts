@@ -73,9 +73,8 @@ test("object-default-values", async () => {
       import { z } from "zod";
 
       const MyComponent = z
-        .object({ id: z.number(), name: z.string() })
-        .partial()
-        .passthrough();
+        .looseObject({ id: z.number(), name: z.string() })
+        .partial();
 
       export const schemas = {
         MyComponent,
@@ -91,9 +90,8 @@ test("object-default-values", async () => {
               name: "empty-object",
               type: "Query",
               schema: z
-                .object({ foo: z.string() })
+                .looseObject({ foo: z.string() })
                 .partial()
-                .passthrough()
                 .optional()
                 .default({}),
             },
@@ -101,9 +99,8 @@ test("object-default-values", async () => {
               name: "default-object",
               type: "Query",
               schema: z
-                .object({ foo: z.string() })
+                .looseObject({ foo: z.string() })
                 .partial()
-                .passthrough()
                 .optional()
                 .default({ foo: "bar" }),
             },

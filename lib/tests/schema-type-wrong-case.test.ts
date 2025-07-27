@@ -30,7 +30,7 @@ test("schema-type-wrong-case", async () => {
       "import { makeApi, Zodios, type ZodiosOptions } from "@zodios/core";
       import { z } from "zod";
 
-      const test1 = z.object({ text1: z.number() }).partial().passthrough();
+      const test1 = z.looseObject({ text1: z.number() }).partial();
 
       export const schemas = {
         test1,
@@ -41,7 +41,7 @@ test("schema-type-wrong-case", async () => {
           method: "put",
           path: "/pet",
           requestFormat: "json",
-          response: z.object({ text1: z.number() }).partial().passthrough(),
+          response: z.looseObject({ text1: z.number() }).partial(),
         },
       ]);
 

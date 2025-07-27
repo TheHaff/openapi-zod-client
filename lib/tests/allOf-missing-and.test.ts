@@ -40,9 +40,9 @@ test("allOf-missing-and", async () => {
       "import { makeApi, Zodios, type ZodiosOptions } from "@zodios/core";
       import { z } from "zod";
 
-      const test1 = z.object({ text1: z.string() }).partial().passthrough();
-      const test2 = z.object({ text2: z.number() }).partial().passthrough();
-      const test3 = z.object({ text3: z.boolean() }).partial().passthrough();
+      const test1 = z.looseObject({ text1: z.string() }).partial();
+      const test2 = z.looseObject({ text2: z.number() }).partial();
+      const test3 = z.looseObject({ text3: z.boolean() }).partial();
       const test4 = test1.and(test2).and(test3);
 
       export const schemas = {

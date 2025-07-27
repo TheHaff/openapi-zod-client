@@ -124,9 +124,8 @@ test("enum-null", async () => {
       const Null3 = z.enum(["a", null]);
       const Null4 = z.literal(null);
       const Compound: z.ZodType<Compound> = z
-        .object({ field: z.union([Null1, Null2, Null3, Null4, z.string()]) })
-        .partial()
-        .passthrough();
+        .looseObject({ field: z.union([Null1, Null2, Null3, Null4, z.string()]) })
+        .partial();
 
       export const schemas = {
         Null1,

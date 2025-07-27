@@ -49,22 +49,21 @@ test("schema-type-list-3.1", async () => {
 
       const test1 = z.union([
         z
-          .object({
+          .looseObject({
             text1: z.string(),
             name: z.union([z.enum(["Dogs", "Cats", "Mice"]), z.null()]),
             another: z.union([z.enum(["Dogs", "Cats", "Mice"]), z.never()]),
           })
-          .partial()
-          .passthrough(),
+          .partial(),
         z.null(),
       ]);
       const test2 = z.union([
-        z.object({ text2: z.number() }).partial().passthrough(),
+        z.looseObject({ text2: z.number() }).partial(),
         z.boolean(),
       ]);
       const test3 = z.union([
         z.number(),
-        z.object({ text3: z.boolean() }).partial().passthrough(),
+        z.looseObject({ text3: z.boolean() }).partial(),
       ]);
       const test4 = test1.and(test2).and(test3);
 
