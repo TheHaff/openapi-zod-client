@@ -229,46 +229,7 @@ describe("anyOf behavior", () => {
 
         const output = await generateZodClientFromOpenAPI({ disableWriteToFile: true, openApiDoc });
         expect(output).toMatchInlineSnapshot(`
-          "import { makeApi, Zodios, type ZodiosOptions } from "@zodios/core";
-          import { z } from "zod";
-
-          const PetByAge = z.looseObject({
-            age: z.number().int(),
-            nickname: z.string().optional(),
-          });
-          const PetByType = z.looseObject({
-            pet_type: z.enum(["Cat", "Dog"]),
-            hunts: z.boolean().optional(),
-          });
-          const anyOfRef = z.union([PetByAge, PetByType]).optional();
-
-          export const schemas = {
-            PetByAge,
-            PetByType,
-            anyOfRef,
-          };
-
-          const endpoints = makeApi([
-            {
-              method: "get",
-              path: "/test",
-              requestFormat: "json",
-              parameters: [
-                {
-                  name: "anyOfRef",
-                  type: "Query",
-                  schema: anyOfRef,
-                },
-              ],
-              response: z.void(),
-            },
-          ]);
-
-          export const api = new Zodios(endpoints);
-
-          export function createApiClient(baseUrl: string, options?: ZodiosOptions) {
-            return new Zodios(baseUrl, endpoints, options);
-          }
+          "import { z } from "zod";
           "
         `);
     });

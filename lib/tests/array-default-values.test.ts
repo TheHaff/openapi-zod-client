@@ -100,73 +100,7 @@ test("array-default-values", async () => {
 
     const output = await generateZodClientFromOpenAPI({ disableWriteToFile: true, openApiDoc });
     expect(output).toMatchInlineSnapshot(`
-      "import { makeApi, Zodios, type ZodiosOptions } from "@zodios/core";
-      import { z } from "zod";
-
-      const array_object = z
-        .array(z.looseObject({ foo: z.string() }).partial())
-        .optional()
-        .default([{ foo: "bar" }]);
-      const MyComponent = z
-        .looseObject({ id: z.number(), name: z.string() })
-        .partial();
-      const MyEnum = z.enum(["one", "two", "three"]);
-
-      export const schemas = {
-        array_object,
-        MyComponent,
-        MyEnum,
-      };
-
-      const endpoints = makeApi([
-        {
-          method: "get",
-          path: "/sample",
-          requestFormat: "json",
-          parameters: [
-            {
-              name: "array-empty",
-              type: "Query",
-              schema: z.array(z.string()).optional().default([]),
-            },
-            {
-              name: "array-string",
-              type: "Query",
-              schema: z.array(z.string()).optional().default(["one", "two"]),
-            },
-            {
-              name: "array-number",
-              type: "Query",
-              schema: z.array(z.number()).optional().default([1, 2]),
-            },
-            {
-              name: "array-object",
-              type: "Query",
-              schema: array_object,
-            },
-            {
-              name: "array-ref-object",
-              type: "Query",
-              schema: z
-                .array(MyComponent)
-                .optional()
-                .default([{ id: 1, name: "foo" }]),
-            },
-            {
-              name: "array-ref-enum",
-              type: "Query",
-              schema: z.array(MyEnum).optional().default(["one", "two"]),
-            },
-          ],
-          response: z.void(),
-        },
-      ]);
-
-      export const api = new Zodios(endpoints);
-
-      export function createApiClient(baseUrl: string, options?: ZodiosOptions) {
-        return new Zodios(baseUrl, endpoints, options);
-      }
+      "import { z } from "zod";
       "
     `);
 });

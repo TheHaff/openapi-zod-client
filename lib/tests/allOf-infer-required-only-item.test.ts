@@ -70,8 +70,7 @@ test("allOf-infer-required-only-item", async () => {
         },
     });
     expect(output).toMatchInlineSnapshot(`
-      "import { makeApi, Zodios, type ZodiosOptions } from "@zodios/core";
-      import { z } from "zod";
+      "import { z } from "zod";
 
       type userResponse = Partial<{
         user: user & {
@@ -95,21 +94,6 @@ test("allOf-infer-required-only-item", async () => {
         user,
         userResponse,
       };
-
-      const endpoints = makeApi([
-        {
-          method: "get",
-          path: "/user",
-          requestFormat: "json",
-          response: userResponse,
-        },
-      ]);
-
-      export const api = new Zodios(endpoints);
-
-      export function createApiClient(baseUrl: string, options?: ZodiosOptions) {
-        return new Zodios(baseUrl, endpoints, options);
-      }
       "
     `);
 });

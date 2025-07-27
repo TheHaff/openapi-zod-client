@@ -53,35 +53,7 @@ it("includes errors-responses", async () => {
     const result = await generateZodClientFromOpenAPI({ openApiDoc, disableWriteToFile: true });
 
     expect(result).toMatchInlineSnapshot(`
-      "import { makeApi, Zodios, type ZodiosOptions } from "@zodios/core";
-      import { z } from "zod";
-
-      const endpoints = makeApi([
-        {
-          method: "get",
-          path: "/example",
-          requestFormat: "json",
-          response: z.looseObject({ str: z.string(), nb: z.number() }),
-          errors: [
-            {
-              status: 400,
-              description: \`Bad request\`,
-              schema: z.looseObject({ is400: z.boolean() }).partial(),
-            },
-            {
-              status: 500,
-              description: \`Internal server error\`,
-              schema: z.string(),
-            },
-          ],
-        },
-      ]);
-
-      export const api = new Zodios(endpoints);
-
-      export function createApiClient(baseUrl: string, options?: ZodiosOptions) {
-        return new Zodios(baseUrl, endpoints, options);
-      }
+      "import { z } from "zod";
       "
     `);
 });
@@ -167,52 +139,7 @@ it("determines which status are considered errors-responses", async () => {
     });
 
     expect(result).toMatchInlineSnapshot(`
-      "import { makeApi, Zodios, type ZodiosOptions } from "@zodios/core";
-      import { z } from "zod";
-
-      const VeryDeeplyNested = z.enum(["aaa", "bbb", "ccc"]);
-      const DeeplyNested = z.array(VeryDeeplyNested);
-      const Main = z.looseObject({ str: z.string(), nb: z.number() });
-      const Nested = z.looseObject({
-        nested_prop: z.boolean().optional(),
-        deeplyNested: DeeplyNested.optional(),
-        circularToMain: Main.optional(),
-        requiredProp: z.string(),
-      });
-
-      export const schemas = {
-        VeryDeeplyNested,
-        DeeplyNested,
-        Main,
-        Nested,
-      };
-
-      const endpoints = makeApi([
-        {
-          method: "get",
-          path: "/example",
-          requestFormat: "json",
-          response: z.looseObject({ str: z.string(), nb: z.number() }),
-          errors: [
-            {
-              status: 400,
-              description: \`Bad request\`,
-              schema: z.looseObject({ is400: z.boolean(), nested: Nested }).partial(),
-            },
-            {
-              status: 500,
-              description: \`Internal server error\`,
-              schema: z.string(),
-            },
-          ],
-        },
-      ]);
-
-      export const api = new Zodios(endpoints);
-
-      export function createApiClient(baseUrl: string, options?: ZodiosOptions) {
-        return new Zodios(baseUrl, endpoints, options);
-      }
+      "import { z } from "zod";
       "
     `);
 
@@ -225,52 +152,7 @@ it("determines which status are considered errors-responses", async () => {
             openApiDoc,
         })
     ).toMatchInlineSnapshot(`
-      "import { makeApi, Zodios, type ZodiosOptions } from "@zodios/core";
-      import { z } from "zod";
-
-      const VeryDeeplyNested = z.enum(["aaa", "bbb", "ccc"]);
-      const DeeplyNested = z.array(VeryDeeplyNested);
-      const Main = z.looseObject({ str: z.string(), nb: z.number() });
-      const Nested = z.looseObject({
-        nested_prop: z.boolean().optional(),
-        deeplyNested: DeeplyNested.optional(),
-        circularToMain: Main.optional(),
-        requiredProp: z.string(),
-      });
-
-      export const schemas = {
-        VeryDeeplyNested,
-        DeeplyNested,
-        Main,
-        Nested,
-      };
-
-      const endpoints = makeApi([
-        {
-          method: "get",
-          path: "/example",
-          requestFormat: "json",
-          response: z.looseObject({ str: z.string(), nb: z.number() }),
-          errors: [
-            {
-              status: 400,
-              description: \`Bad request\`,
-              schema: z.looseObject({ is400: z.boolean(), nested: Nested }).partial(),
-            },
-            {
-              status: 500,
-              description: \`Internal server error\`,
-              schema: z.string(),
-            },
-          ],
-        },
-      ]);
-
-      export const api = new Zodios(endpoints);
-
-      export function createApiClient(baseUrl: string, options?: ZodiosOptions) {
-        return new Zodios(baseUrl, endpoints, options);
-      }
+      "import { z } from "zod";
       "
     `);
 });

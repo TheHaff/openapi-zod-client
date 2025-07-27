@@ -2,23 +2,23 @@
 
 [![Screenshot 2022-11-12 at 18 52 25](https://user-images.githubusercontent.com/47224540/201487856-ffc4c862-6f31-4de1-8ef1-3981fabf3416.png)](https://openapi-zod-client.vercel.app/)
 
-Generates a [zodios](https://github.com/ecyrbe/zodios) (_typescript http client with zod validation_) from a (json/yaml) [OpenAPI spec](https://github.com/OAI/OpenAPI-Specification) **(or just use the generated schemas/endpoints/etc !)**
+Generates Zod schemas from a (json/yaml) [OpenAPI spec](https://github.com/OAI/OpenAPI-Specification)
 
 -   can be used programmatically _(do w/e you want with the computed schemas/endpoints)_
 -   or used as a CLI _(generates a prettier .ts file with deduplicated variables when pointing to the same schema/$ref)_
 
--   client typesafety using [zodios](https://github.com/ecyrbe/zodios)
+-   client typesafety using [Zod](https://github.com/colinhacks/zod)
 -   tested (using [vitest](https://vitest.dev/)) against official [OpenAPI specs samples](https://github.com/OAI/OpenAPI-Specification/tree/main/schemas)
 
 # Why this exists
 
 sometimes you don't have control on your API, maybe you need to consume APIs from other teams (who might each use a different language/framework), you only have their Open API spec as source of truth, then this might help 😇
 
-you could use `openapi-zod-client` to automate the API integration part (doesn't matter if you consume it in your front or back-end, zodios is agnostic) on your CI and just import the generated `api` client
+you could use `openapi-zod-client` to automate the schema generation part on your CI and just import the generated schemas
 
 ## Comparison vs tRPC etc
 
-please just use [tRPC](https://github.com/trpc/trpc) or alternatives ([zodios](https://www.zodios.org/) is actually a full-featured solution and not just an api client, [ts-rest](https://ts-rest.com/) looks cool as well) if you do have control on your API/back-end
+please just use [tRPC](https://github.com/trpc/trpc) or alternatives ([ts-rest](https://ts-rest.com/) looks cool as well) if you do have control on your API/back-end
 
 # Usage
 
@@ -50,7 +50,7 @@ For more info, run any command with the `--help` flag:
   $ openapi-zod-client --help
 
 Options:
-  -o, --output <path>       Output path for the zodios api client ts file (defaults to `<input>.client.ts`)
+  -o, --output <path>       Output path for the zod schemas ts file (defaults to `<input>.schemas.ts`)
   -t, --template <path>     Template path for the handlebars template that will be used to generate the output
   -p, --prettier <path>     Prettier config path that will be used to format the output client file
   -b, --base-url <url>      Base url for the api
@@ -218,7 +218,7 @@ components:
 output:
 
 ```ts
-import { makeApi, Zodios } from "@zodios/core";
+import { z } from "zod";
 import { z } from "zod";
 
 const Pet = z.object({ id: z.number().int(), name: z.string(), tag: z.string().optional() });
@@ -266,11 +266,9 @@ const endpoints = makeApi([
     },
 ]);
 
-export const api = new Zodios(endpoints);
-
-export function createApiClient(baseUrl: string) {
-    return new Zodios(baseUrl, endpoints);
-}
+export const schemas = {
+    // Your generated schemas here
+};
 ```
 
 # TODO

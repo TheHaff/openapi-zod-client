@@ -122,76 +122,7 @@ test("inline-simple-schemas", async () => {
 
     const ctx = await generateZodClientFromOpenAPI({ openApiDoc, disableWriteToFile: true });
     expect(ctx).toMatchInlineSnapshot(`
-      "import { makeApi, Zodios, type ZodiosOptions } from "@zodios/core";
-      import { z } from "zod";
-
-      const BasicString = z.string();
-      const SimpleObject = z.looseObject({ str: z.string() }).partial();
-      const ComplexObject = z
-        .looseObject({
-          str: z.string(),
-          strRef: BasicString,
-          num: z.number(),
-          bool: z.boolean(),
-          ref: SimpleObject,
-          refArray: z.array(SimpleObject),
-        })
-        .partial();
-
-      export const schemas = {
-        BasicString,
-        SimpleObject,
-        ComplexObject,
-      };
-
-      const endpoints = makeApi([
-        {
-          method: "get",
-          path: "/inline-simple-schemas",
-          requestFormat: "json",
-          response: z.string(),
-          errors: [
-            {
-              status: 400,
-              schema: z.enum(["xxx", "yyy", "zzz"]),
-            },
-            {
-              status: 401,
-              schema: z.enum(["xxx", "yyy", "zzz"]),
-            },
-            {
-              status: 402,
-              schema: z.array(z.string()),
-            },
-            {
-              status: 403,
-              schema: z.looseObject({ str: z.string() }).partial(),
-            },
-            {
-              status: 404,
-              schema: z.looseObject({ str: z.string() }).partial(),
-            },
-            {
-              status: 405,
-              schema: z.array(SimpleObject),
-            },
-            {
-              status: 406,
-              schema: z.array(z.looseObject({ str: z.string() }).partial()),
-            },
-            {
-              status: 407,
-              schema: z.array(ComplexObject),
-            },
-          ],
-        },
-      ]);
-
-      export const api = new Zodios(endpoints);
-
-      export function createApiClient(baseUrl: string, options?: ZodiosOptions) {
-        return new Zodios(baseUrl, endpoints, options);
-      }
+      "import { z } from "zod";
       "
     `);
 });

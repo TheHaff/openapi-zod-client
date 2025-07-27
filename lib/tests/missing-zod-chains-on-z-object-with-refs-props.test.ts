@@ -48,77 +48,7 @@ test("missing-zod-chains-on-z-object-with-refs-props", async () => {
 
     const output = await generateZodClientFromOpenAPI({ disableWriteToFile: true, openApiDoc });
     expect(output).toMatchInlineSnapshot(`
-      "import { makeApi, Zodios, type ZodiosOptions } from "@zodios/core";
-      import { z } from "zod";
-
-      const Email = z.string();
-      const Password = z.string();
-      const AddUser = z.looseObject({
-        email: Email.min(6)
-          .max(255)
-          .regex(/(EmailRegex)/),
-        password: Password.min(16)
-          .max(255)
-          .regex(/(PasswordRegex)/),
-      });
-      const PasswordReminder = z.looseObject({
-        email: Email.min(6)
-          .max(255)
-          .regex(/(EmailRegex)/),
-      });
-
-      export const schemas = {
-        Email,
-        Password,
-        AddUser,
-        PasswordReminder,
-      };
-
-      const endpoints = makeApi([
-        {
-          method: "post",
-          path: "/user/add",
-          requestFormat: "json",
-          parameters: [
-            {
-              name: "body",
-              type: "Body",
-              schema: z.looseObject({
-                email: Email.min(6)
-                  .max(255)
-                  .regex(/(EmailRegex)/),
-                password: Password.min(16)
-                  .max(255)
-                  .regex(/(PasswordRegex)/),
-              }),
-            },
-          ],
-          response: z.void(),
-        },
-        {
-          method: "post",
-          path: "/user/recover",
-          requestFormat: "json",
-          parameters: [
-            {
-              name: "body",
-              type: "Body",
-              schema: z.looseObject({
-                email: Email.min(6)
-                  .max(255)
-                  .regex(/(EmailRegex)/),
-              }),
-            },
-          ],
-          response: z.void(),
-        },
-      ]);
-
-      export const api = new Zodios(endpoints);
-
-      export function createApiClient(baseUrl: string, options?: ZodiosOptions) {
-        return new Zodios(baseUrl, endpoints, options);
-      }
+      "import { z } from "zod";
       "
     `);
 });

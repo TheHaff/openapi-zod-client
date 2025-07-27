@@ -46,56 +46,7 @@ test("common-parameters", async () => {
 
     const output = await generateZodClientFromOpenAPI({ disableWriteToFile: true, openApiDoc });
     expect(output).toMatchInlineSnapshot(`
-      "import { makeApi, Zodios, type ZodiosOptions } from "@zodios/core";
-      import { z } from "zod";
-
-      const endpoints = makeApi([
-        {
-          method: "post",
-          path: "/pet/:owner_name",
-          requestFormat: "json",
-          parameters: [
-            {
-              name: "owner_name",
-              type: "Path",
-              schema: z.string(),
-            },
-          ],
-          response: z.boolean(),
-        },
-        {
-          method: "post",
-          path: "/pet/:owner_nameId",
-          requestFormat: "json",
-          parameters: [
-            {
-              name: "owner_nameId",
-              type: "Path",
-              schema: z.string(),
-            },
-          ],
-          response: z.boolean(),
-        },
-        {
-          method: "post",
-          path: "/pet/:petId/uploadImage",
-          requestFormat: "json",
-          parameters: [
-            {
-              name: "petId",
-              type: "Path",
-              schema: z.string(),
-            },
-          ],
-          response: z.boolean(),
-        },
-      ]);
-
-      export const api = new Zodios(endpoints);
-
-      export function createApiClient(baseUrl: string, options?: ZodiosOptions) {
-        return new Zodios(baseUrl, endpoints, options);
-      }
+      "import { z } from "zod";
       "
     `);
 });

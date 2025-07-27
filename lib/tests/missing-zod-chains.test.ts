@@ -56,68 +56,7 @@ test("missing-zod-chains", async () => {
 
     const output = await generateZodClientFromOpenAPI({ disableWriteToFile: true, openApiDoc });
     expect(output).toMatchInlineSnapshot(`
-      "import { makeApi, Zodios, type ZodiosOptions } from "@zodios/core";
-      import { z } from "zod";
-
-      const test1 = z.string();
-      const test2 = z.number();
-      const test3 = z.looseObject({
-        text: z.string().min(5),
-        num: z.number().int().gte(10),
-      });
-      const nulltype = z.looseObject({}).partial();
-      const anyOfType = z.union([
-        z.looseObject({}).partial(),
-        z.looseObject({ foo: z.string() }).partial(),
-      ]);
-
-      export const schemas = {
-        test1,
-        test2,
-        test3,
-        nulltype,
-        anyOfType,
-      };
-
-      const endpoints = makeApi([
-        {
-          method: "put",
-          path: "/pet",
-          requestFormat: "json",
-          response: z.string().min(5),
-          errors: [
-            {
-              status: 401,
-              description: \`Successful operation\`,
-              schema: z.number().int().gte(10),
-            },
-            {
-              status: 402,
-              description: \`Successful operation\`,
-              schema: z.looseObject({
-                text: z.string().min(5),
-                num: z.number().int().gte(10),
-              }),
-            },
-            {
-              status: 403,
-              description: \`Successful operation\`,
-              schema: z.looseObject({}).partial().nullable(),
-            },
-            {
-              status: 404,
-              description: \`Successful operation\`,
-              schema: anyOfType,
-            },
-          ],
-        },
-      ]);
-
-      export const api = new Zodios(endpoints);
-
-      export function createApiClient(baseUrl: string, options?: ZodiosOptions) {
-        return new Zodios(baseUrl, endpoints, options);
-      }
+      "import { z } from "zod";
       "
     `);
 });

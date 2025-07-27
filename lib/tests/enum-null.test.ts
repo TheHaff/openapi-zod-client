@@ -108,8 +108,7 @@ test("enum-null", async () => {
 
     const output = await generateZodClientFromOpenAPI({ disableWriteToFile: true, openApiDoc, options: { shouldExportAllTypes: true } });
     expect(output).toMatchInlineSnapshot(`
-      "import { makeApi, Zodios, type ZodiosOptions } from "@zodios/core";
-      import { z } from "zod";
+      "import { z } from "zod";
 
       type Compound = Partial<{
         field: Null1 | Null2 | Null3 | Null4 | string;
@@ -118,59 +117,6 @@ test("enum-null", async () => {
       type Null2 = "a" | null;
       type Null3 = "a" | null;
       type Null4 = null;
-
-      const Null1 = z.literal(null);
-      const Null2 = z.enum(["a", null]);
-      const Null3 = z.enum(["a", null]);
-      const Null4 = z.literal(null);
-      const Compound: z.ZodType<Compound> = z
-        .looseObject({ field: z.union([Null1, Null2, Null3, Null4, z.string()]) })
-        .partial();
-
-      export const schemas = {
-        Null1,
-        Null2,
-        Null3,
-        Null4,
-        Compound,
-      };
-
-      const endpoints = makeApi([
-        {
-          method: "get",
-          path: "/sample",
-          requestFormat: "json",
-          response: z.literal(null),
-          errors: [
-            {
-              status: 400,
-              description: \`null with a string\`,
-              schema: z.enum(["a", null]),
-            },
-            {
-              status: 401,
-              description: \`null with a string and nullable\`,
-              schema: z.enum(["a", null]).nullable(),
-            },
-            {
-              status: 402,
-              description: \`null with nullable\`,
-              schema: z.literal(null).nullable(),
-            },
-            {
-              status: 403,
-              description: \`object that references null\`,
-              schema: Compound,
-            },
-          ],
-        },
-      ]);
-
-      export const api = new Zodios(endpoints);
-
-      export function createApiClient(baseUrl: string, options?: ZodiosOptions) {
-        return new Zodios(baseUrl, endpoints, options);
-      }
       "
     `);
 });

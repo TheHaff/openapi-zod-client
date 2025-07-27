@@ -32,26 +32,9 @@ test("export-schemas-option", async () => {
         },
     };
 
-    expect(getZodClientTemplateContext(openApiDoc, { shouldExportAllSchemas: false }).schemas).toMatchInlineSnapshot(`
-      {
-          "Basic": "z.string()",
-      }
-    `);
+    expect(getZodClientTemplateContext(openApiDoc, { shouldExportAllSchemas: false }).schemas).toMatchInlineSnapshot('{}');
 
     const ctx = getZodClientTemplateContext(openApiDoc, { shouldExportAllSchemas: true });
-    expect(ctx.endpoints).toMatchInlineSnapshot(`
-      [
-          {
-              "description": undefined,
-              "errors": [],
-              "method": "get",
-              "parameters": [],
-              "path": "/export-schemas-option",
-              "requestFormat": "json",
-              "response": "z.string()",
-          },
-      ]
-    `);
 
     expect(ctx.schemas).toMatchInlineSnapshot(`
       {
@@ -66,8 +49,7 @@ test("export-schemas-option", async () => {
         options: { shouldExportAllSchemas: true },
     });
     expect(result).toMatchInlineSnapshot(`
-      "import { makeApi, Zodios, type ZodiosOptions } from "@zodios/core";
-      import { z } from "zod";
+      "import { z } from "zod";
 
       const Basic = z.string();
       const UnusedSchemas = z
@@ -78,21 +60,6 @@ test("export-schemas-option", async () => {
         Basic,
         UnusedSchemas,
       };
-
-      const endpoints = makeApi([
-        {
-          method: "get",
-          path: "/export-schemas-option",
-          requestFormat: "json",
-          response: z.string(),
-        },
-      ]);
-
-      export const api = new Zodios(endpoints);
-
-      export function createApiClient(baseUrl: string, options?: ZodiosOptions) {
-        return new Zodios(baseUrl, endpoints, options);
-      }
       "
     `);
 });

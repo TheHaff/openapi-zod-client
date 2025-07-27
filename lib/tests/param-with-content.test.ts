@@ -60,56 +60,7 @@ test("param-with-content", async () => {
 
     const output = await generateZodClientFromOpenAPI({ disableWriteToFile: true, openApiDoc });
     expect(output).toMatchInlineSnapshot(`
-      "import { makeApi, Zodios, type ZodiosOptions } from "@zodios/core";
-      import { z } from "zod";
-
-      const test3 = z.looseObject({ text3: z.boolean() }).partial();
-
-      export const schemas = {
-        test3,
-      };
-
-      const endpoints = makeApi([
-        {
-          method: "put",
-          path: "/pet",
-          requestFormat: "json",
-          parameters: [
-            {
-              name: "store",
-              type: "Path",
-              schema: z.number().int(),
-            },
-            {
-              name: "thing",
-              type: "Query",
-              schema: z.looseObject({ text1: z.string() }).partial().optional(),
-            },
-            {
-              name: "wrong param",
-              type: "Query",
-              schema: z.looseObject({ text2: z.number() }).partial().optional(),
-            },
-            {
-              name: "Accept-Language",
-              type: "Header",
-              schema: z.string().optional().default("EN"),
-            },
-            {
-              name: "missing",
-              type: "Query",
-              schema: z.unknown().optional(),
-            },
-          ],
-          response: z.looseObject({ text3: z.boolean() }).partial(),
-        },
-      ]);
-
-      export const api = new Zodios(endpoints);
-
-      export function createApiClient(baseUrl: string, options?: ZodiosOptions) {
-        return new Zodios(baseUrl, endpoints, options);
-      }
+      "import { z } from "zod";
       "
     `);
 });

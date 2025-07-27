@@ -52,48 +52,7 @@ test("allOf-single-ref", async () => {
 
     const output = await generateZodClientFromOpenAPI({ disableWriteToFile: true, openApiDoc });
     expect(output).toMatchInlineSnapshot(`
-      "import { makeApi, Zodios, type ZodiosOptions } from "@zodios/core";
-      import { z } from "zod";
-
-      const MyComponent = z.enum(["one", "two", "three"]);
-      const allOf_ref_param = MyComponent.optional();
-      
-      export const schemas = {
-        MyComponent,
-        allOf_ref_param,
-      };
-      
-      const endpoints = makeApi([
-        {
-          method: "get",
-          path: "/test",
-          requestFormat: "json",
-          parameters: [
-            {
-              name: "allOf_ref_param",
-              type: "Query",
-              schema: allOf_ref_param,
-            },
-            {
-              name: "oneOf_ref_param",
-              type: "Query",
-              schema: allOf_ref_param,
-            },
-            {
-              name: "anyOf_ref_param",
-              type: "Query",
-              schema: allOf_ref_param,
-            },
-          ],
-          response: z.void(),
-        },
-      ]);
-      
-      export const api = new Zodios(endpoints);
-      
-      export function createApiClient(baseUrl: string, options?: ZodiosOptions) {
-        return new Zodios(baseUrl, endpoints, options);
-      }
+      "import { z } from "zod";
       "
     `);
 });

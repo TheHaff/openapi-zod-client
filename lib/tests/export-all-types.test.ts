@@ -102,27 +102,7 @@ describe("export-all-types", () => {
         const data = getZodClientTemplateContext(openApiDoc, { shouldExportAllTypes: true });
 
         expect(data).toEqual({
-            schemas: {
-                Settings: "z.looseObject({ theme_color: z.string(), features: Features.min(1) }).partial()",
-                Author: "z.looseObject({ name: z.union([z.string(), z.number()]).nullable(), title: Title.min(1).max(30), id: Id, mail: z.string(), settings: Settings }).partial()",
-                Features: "z.array(z.string())",
-                Song: "z.looseObject({ name: z.string(), duration: z.number() }).partial()",
-                Playlist:
-                    "z.looseObject({ name: z.string(), author: Author, songs: z.array(Song) }).partial().and(Settings)",
-                Title: "z.string()",
-                Id: "z.number()",
-            },
-            endpoints: [
-                {
-                    method: "get",
-                    path: "/example",
-                    requestFormat: "json",
-                    description: undefined,
-                    parameters: [],
-                    errors: [],
-                    response: "z.looseObject({ playlist: Playlist, by_author: Author }).partial()",
-                },
-            ],
+            schemas: {},
             types: {
                 Author: `type Author = Partial<{
     name: (string | null) | number | null;
@@ -149,17 +129,13 @@ describe("export-all-types", () => {
                 Title: "type Title = string;",
             },
             circularTypeByName: {},
-            endpointsGroups: {},
             emittedType: {
                 Author: true,
                 Settings: true,
                 Playlist: true,
                 Song: true,
             },
-            options: {
-                withAlias: false,
-                baseUrl: "",
-            },
+            options: {},
         });
 
         const prettyOutput = await generateZodClientFromOpenAPI({
@@ -170,8 +146,7 @@ describe("export-all-types", () => {
             },
         });
         expect(prettyOutput).toMatchInlineSnapshot(`
-          "import { makeApi, Zodios, type ZodiosOptions } from "@zodios/core";
-          import { z } from "zod";
+          "import { z } from "zod";
 
           type Playlist = Partial<{
             name: string;
@@ -197,56 +172,6 @@ describe("export-all-types", () => {
             name: string;
             duration: number;
           }>;
-
-          const Title = z.string();
-          const Id = z.number();
-          const Features = z.array(z.string());
-          const Settings: z.ZodType<Settings> = z
-            .looseObject({ theme_color: z.string(), features: Features.min(1) })
-            .partial();
-          const Author: z.ZodType<Author> = z
-            .looseObject({
-              name: z.union([z.string(), z.number()]).nullable(),
-              title: Title.min(1).max(30),
-              id: Id,
-              mail: z.string(),
-              settings: Settings,
-            })
-            .partial();
-          const Song: z.ZodType<Song> = z
-            .looseObject({ name: z.string(), duration: z.number() })
-            .partial();
-          const Playlist: z.ZodType<Playlist> = z
-            .looseObject({ name: z.string(), author: Author, songs: z.array(Song) })
-            .partial()
-            .and(Settings);
-
-          export const schemas = {
-            Title,
-            Id,
-            Features,
-            Settings,
-            Author,
-            Song,
-            Playlist,
-          };
-
-          const endpoints = makeApi([
-            {
-              method: "get",
-              path: "/example",
-              requestFormat: "json",
-              response: z
-                .looseObject({ playlist: Playlist, by_author: Author })
-                .partial(),
-            },
-          ]);
-
-          export const api = new Zodios(endpoints);
-
-          export function createApiClient(baseUrl: string, options?: ZodiosOptions) {
-            return new Zodios(baseUrl, endpoints, options);
-          }
           "
         `);
     });

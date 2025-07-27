@@ -46,35 +46,7 @@ test("enum-min-max", async () => {
 
     const output = await generateZodClientFromOpenAPI({ disableWriteToFile: true, openApiDoc });
     expect(output).toMatchInlineSnapshot(`
-      "import { makeApi, Zodios, type ZodiosOptions } from "@zodios/core";
-      import { z } from "zod";
-
-      const endpoints = makeApi([
-        {
-          method: "get",
-          path: "/sample",
-          requestFormat: "json",
-          parameters: [
-            {
-              name: "foo",
-              type: "Query",
-              schema: z.union([z.literal(1), z.literal(-2), z.literal(3)]).optional(),
-            },
-            {
-              name: "bar",
-              type: "Query",
-              schema: z.enum(["Dogs", "Cats", "Mice"]).optional(),
-            },
-          ],
-          response: z.void(),
-        },
-      ]);
-
-      export const api = new Zodios(endpoints);
-
-      export function createApiClient(baseUrl: string, options?: ZodiosOptions) {
-        return new Zodios(baseUrl, endpoints, options);
-      }
+      "import { z } from "zod";
       "
     `);
 });

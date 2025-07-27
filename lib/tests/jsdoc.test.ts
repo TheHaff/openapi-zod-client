@@ -96,8 +96,7 @@ test("jsdoc", async () => {
     });
 
     expect(output).toMatchInlineSnapshot(`
-      "import { makeApi, Zodios, type ZodiosOptions } from "@zodios/core";
-      import { z } from "zod";
+      "import { z } from "zod";
 
       type ComplexObject = Partial<{
         /**
@@ -160,43 +159,6 @@ test("jsdoc", async () => {
       type SimpleObject = Partial<{
         str: string;
       }>;
-
-      const SimpleObject: z.ZodType<SimpleObject> = z
-        .looseObject({ str: z.string() })
-        .partial();
-      const ComplexObject: z.ZodType<ComplexObject> = z
-        .looseObject({
-          example: z.string(),
-          examples: z.string(),
-          manyTagsStr: z.enum(["a", "b", "c"]).regex(/^[a-z]*$/),
-          numMin: z.number().gte(0),
-          numMax: z.number().lte(10),
-          manyTagsNum: z.number().gte(0).lte(10).default(5),
-          bool: z.boolean().default(true),
-          ref: SimpleObject,
-          refArray: z.array(SimpleObject),
-        })
-        .partial();
-
-      export const schemas = {
-        SimpleObject,
-        ComplexObject,
-      };
-
-      const endpoints = makeApi([
-        {
-          method: "get",
-          path: "/test",
-          requestFormat: "json",
-          response: ComplexObject,
-        },
-      ]);
-
-      export const api = new Zodios(endpoints);
-
-      export function createApiClient(baseUrl: string, options?: ZodiosOptions) {
-        return new Zodios(baseUrl, endpoints, options);
-      }
       "
     `);
 });

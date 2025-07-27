@@ -4,27 +4,27 @@
 
 [![Screenshot 2022-11-12 at 18 52 25](https://user-images.githubusercontent.com/47224540/201487856-ffc4c862-6f31-4de1-8ef1-3981fabf3416.png)](https://openapi-zod-client.vercel.app/)
 
-Generates a [zodios](https://github.com/ecyrbe/zodios) (_typescript http client with zod validation_) from a (json/yaml) [OpenAPI spec](https://github.com/OAI/OpenAPI-Specification) **(or just use the generated schemas/endpoints/etc !)**
+Generates Zod schemas from a (json/yaml) [OpenAPI spec](https://github.com/OAI/OpenAPI-Specification)
 
 -   can be used programmatically _(do w/e you want with the computed schemas/endpoints)_
 -   or used as a CLI _(generates a prettier .ts file with deduplicated variables when pointing to the same schema/$ref)_
 
--   client typesafety and runtime validation using [zodios](https://github.com/ecyrbe/zodios)
+-   client typesafety and runtime validation using [Zod](https://github.com/colinhacks/zod)
 -   tested (using [vitest](https://vitest.dev/)) against official [OpenAPI specs samples](https://github.com/OAI/OpenAPI-Specification/tree/main/schemas)
 
 # Why this exists
 
 Sometimes you don't have control on your API, maybe you need to consume APIs from other teams (who might each use a different language/framework), you only have their Open API spec as source of truth, then this might help 😇
 
-You could use `openapi-zod-client` to automate the API integration part (doesn't matter if you consume it in your front or back-end, zodios is agnostic) on your CI and just import the generated `api` client
+You could use `openapi-zod-client` to automate the schema generation part on your CI and just import the generated schemas
 
 ## Comparison vs tRPC zodios ts-rest etc
 
-If you do have control on your API/back-end, you should probably use a RPC-like solution like [tRPC](https://github.com/trpc/trpc), [zodios](https://www.zodios.org/) or [ts-rest](https://ts-rest.com/) instead of this.
+If you do have control on your API/back-end, you should probably use a RPC-like solution like [tRPC](https://github.com/trpc/trpc) or [ts-rest](https://ts-rest.com/) instead of this.
 
 # Comparison vs typed-openapi
 
--   `openapi-zod-client` is a CLI that generates a [zodios](https://www.zodios.org/) API client (typescript http client with zod validation), currently using axios as http client
+-   `openapi-zod-client` is a CLI that generates Zod schemas from OpenAPI specifications
 -   [`typed-openapi`](https://github.com/astahmer/typed-openapi) is a CLI/library that generates a headless (bring your own fetcher : fetch, axios, ky, etc...) Typescript API client from an OpenAPI spec, that can output schemas as either just TS types (providing instant suggestions in your IDE) or different runtime validation schemas (zod, typebox, arktype, valibot, io-ts, yup)
 
 # Usage
@@ -57,7 +57,7 @@ For more info, run any command with the `--help` flag:
   $ openapi-zod-client --help
 
 Options:
-  -o, --output <path>               Output path for the zodios api client ts file (defaults to `<input>.client.ts`)
+  -o, --output <path>               Output path for the zod schemas ts file (defaults to `<input>.schemas.ts`)
   -t, --template <path>             Template path for the handlebars template that will be used to generate the output
   -p, --prettier <path>             Prettier config path that will be used to format the output client file
   -b, --base-url <url>              Base url for the api
@@ -94,7 +94,7 @@ You can pass a custom [handlebars](https://handlebarsjs.com/) template and/or a 
 -   `--success-expr` is bound to [`isMainResponseStatus`](https://github.com/astahmer/openapi-zod-client/blob/b7717b53023728d077ceb2f451e4787f32945b3d/src/generateZodClientFromOpenAPI.ts#L234-L244)
 -   `--error-expr` is bound to [`isErrorStatus`](https://github.com/astahmer/openapi-zod-client/blob/b7717b53023728d077ceb2f451e4787f32945b3d/src/generateZodClientFromOpenAPI.ts#L245-L256)
 
-You can pass an expression that will be safely evaluted (thanks to [whence](https://github.com/jonschlinkert/whence/)) and works like `validateStatus` from axios to determine which OpenAPI `ResponseItem` should be picked as the main one for the `ZodiosEndpoint["response"]` and which ones will be added to the `ZodiosEndpoint["errors"]` array.
+You can pass an expression that will be safely evaluted (thanks to [whence](https://github.com/jonschlinkert/whence/)) and works like `validateStatus` from axios to determine which OpenAPI `ResponseItem` should be picked as the main one for the response and which ones will be added to the errors array.
 
 Exemple: `--success-expr "status >= 200 && status < 300"`
 
@@ -234,7 +234,7 @@ components:
 output:
 
 ```ts
-import { makeApi, Zodios } from "@zodios/core";
+import { z } from "zod";
 import { z } from "zod";
 
 const Pet = z.object({ id: z.number().int(), name: z.string(), tag: z.string().optional() });
@@ -282,11 +282,9 @@ const endpoints = makeApi([
     },
 ]);
 
-export const api = new Zodios(endpoints);
-
-export function createApiClient(baseUrl: string) {
-    return new Zodios(baseUrl, endpoints);
-}
+export const schemas = {
+    // Your generated schemas here
+};
 ```
 
 # TODO

@@ -65,56 +65,7 @@ test("description-in-zod", async () => {
         options: { withDescription: true },
     });
     expect(output).toMatchInlineSnapshot(`
-      "import { makeApi, Zodios, type ZodiosOptions } from "@zodios/core";
-      import { z } from "zod";
-
-      const endpoints = makeApi([
-        {
-          method: "get",
-          path: "/sample",
-          requestFormat: "json",
-          parameters: [
-            {
-              name: "foo",
-              type: "Query",
-              schema: z
-                .union([z.literal(1), z.literal(-2), z.literal(3)])
-                .describe("foo description")
-                .optional(),
-            },
-            {
-              name: "bar",
-              type: "Query",
-              schema: z
-                .union([z.literal(1.2), z.literal(34), z.literal(-56.789)])
-                .describe("bar description")
-                .optional(),
-            },
-            {
-              name: "baz",
-              type: "Query",
-              schema: z
-                .union([z.literal(1.3), z.literal(34.1), z.literal(-57.89)])
-                .describe(
-                  \`baz\nmultiline\ndescription\`
-                )
-                .optional(),
-            },
-            {
-              name: "qux",
-              type: "Query",
-              schema: z.string().optional(),
-            },
-          ],
-          response: z.void(),
-        },
-      ]);
-
-      export const api = new Zodios(endpoints);
-
-      export function createApiClient(baseUrl: string, options?: ZodiosOptions) {
-        return new Zodios(baseUrl, endpoints, options);
-      }
+      "import { z } from "zod";
       "
     `);
 });

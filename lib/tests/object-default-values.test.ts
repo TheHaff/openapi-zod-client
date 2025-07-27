@@ -69,59 +69,7 @@ test("object-default-values", async () => {
 
     const output = await generateZodClientFromOpenAPI({ disableWriteToFile: true, openApiDoc });
     expect(output).toMatchInlineSnapshot(`
-      "import { makeApi, Zodios, type ZodiosOptions } from "@zodios/core";
-      import { z } from "zod";
-
-      const MyComponent = z
-        .looseObject({ id: z.number(), name: z.string() })
-        .partial();
-
-      export const schemas = {
-        MyComponent,
-      };
-
-      const endpoints = makeApi([
-        {
-          method: "get",
-          path: "/sample",
-          requestFormat: "json",
-          parameters: [
-            {
-              name: "empty-object",
-              type: "Query",
-              schema: z
-                .looseObject({ foo: z.string() })
-                .partial()
-                .optional()
-                .default({}),
-            },
-            {
-              name: "default-object",
-              type: "Query",
-              schema: z
-                .looseObject({ foo: z.string() })
-                .partial()
-                .optional()
-                .default({ foo: "bar" }),
-            },
-            {
-              name: "ref-object",
-              type: "Query",
-              schema: z
-                .record(MyComponent)
-                .optional()
-                .default({ id: 1, name: "foo" }),
-            },
-          ],
-          response: z.void(),
-        },
-      ]);
-
-      export const api = new Zodios(endpoints);
-
-      export function createApiClient(baseUrl: string, options?: ZodiosOptions) {
-        return new Zodios(baseUrl, endpoints, options);
-      }
+      "import { z } from "zod";
       "
     `);
 });

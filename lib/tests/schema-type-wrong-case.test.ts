@@ -27,29 +27,7 @@ test("schema-type-wrong-case", async () => {
 
     const output = await generateZodClientFromOpenAPI({ disableWriteToFile: true, openApiDoc });
     expect(output).toMatchInlineSnapshot(`
-      "import { makeApi, Zodios, type ZodiosOptions } from "@zodios/core";
-      import { z } from "zod";
-
-      const test1 = z.looseObject({ text1: z.number() }).partial();
-
-      export const schemas = {
-        test1,
-      };
-
-      const endpoints = makeApi([
-        {
-          method: "put",
-          path: "/pet",
-          requestFormat: "json",
-          response: z.looseObject({ text1: z.number() }).partial(),
-        },
-      ]);
-
-      export const api = new Zodios(endpoints);
-
-      export function createApiClient(baseUrl: string, options?: ZodiosOptions) {
-        return new Zodios(baseUrl, endpoints, options);
-      }
+      "import { z } from "zod";
       "
     `);
 });

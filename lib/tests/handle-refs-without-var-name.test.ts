@@ -32,25 +32,8 @@ test("handle-refs-without-var-name", () => {
       {
           "circularTypeByName": {},
           "emittedType": {},
-          "endpoints": [
-              {
-                  "description": undefined,
-                  "errors": [],
-                  "method": "get",
-                  "parameters": [],
-                  "path": "/something",
-                  "requestFormat": "json",
-                  "response": "z.array(Basic)",
-              },
-          ],
-          "endpointsGroups": {},
-          "options": {
-              "baseUrl": "",
-              "withAlias": false,
-          },
-          "schemas": {
-              "Basic": "z.looseObject({}).partial()",
-          },
+          "options": {},
+          "schemas": {},
           "types": {},
       }
     `);

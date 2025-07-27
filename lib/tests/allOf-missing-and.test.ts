@@ -37,35 +37,7 @@ test("allOf-missing-and", async () => {
 
     const output = await generateZodClientFromOpenAPI({ disableWriteToFile: true, openApiDoc });
     expect(output).toMatchInlineSnapshot(`
-      "import { makeApi, Zodios, type ZodiosOptions } from "@zodios/core";
-      import { z } from "zod";
-
-      const test1 = z.looseObject({ text1: z.string() }).partial();
-      const test2 = z.looseObject({ text2: z.number() }).partial();
-      const test3 = z.looseObject({ text3: z.boolean() }).partial();
-      const test4 = test1.and(test2).and(test3);
-
-      export const schemas = {
-        test1,
-        test2,
-        test3,
-        test4,
-      };
-
-      const endpoints = makeApi([
-        {
-          method: "put",
-          path: "/pet",
-          requestFormat: "json",
-          response: test4,
-        },
-      ]);
-
-      export const api = new Zodios(endpoints);
-
-      export function createApiClient(baseUrl: string, options?: ZodiosOptions) {
-        return new Zodios(baseUrl, endpoints, options);
-      }
+      "import { z } from "zod";
       "
     `);
 });

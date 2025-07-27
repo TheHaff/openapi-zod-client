@@ -40,24 +40,7 @@ it("use main-description-as-fallback", async () => {
     });
 
     expect(result).toMatchInlineSnapshot(`
-      "import { makeApi, Zodios, type ZodiosOptions } from "@zodios/core";
-      import { z } from "zod";
-
-      const endpoints = makeApi([
-        {
-          method: "get",
-          path: "/example",
-          description: \`get example\`,
-          requestFormat: "json",
-          response: z.looseObject({ str: z.string(), nb: z.number() }),
-        },
-      ]);
-
-      export const api = new Zodios(endpoints);
-
-      export function createApiClient(baseUrl: string, options?: ZodiosOptions) {
-        return new Zodios(baseUrl, endpoints, options);
-      }
+      "import { z } from "zod";
       "
     `);
 });

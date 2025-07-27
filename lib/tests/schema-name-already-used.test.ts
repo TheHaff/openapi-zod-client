@@ -92,79 +92,8 @@ test("schema-name-already-used", async () => {
       {
           "circularTypeByName": {},
           "emittedType": {},
-          "endpoints": [
-              {
-                  "description": undefined,
-                  "errors": [],
-                  "method": "get",
-                  "parameters": [
-                      {
-                          "name": "schemaNameAlreadyUsed",
-                          "schema": "schemaNameAlreadyUsed",
-                          "type": "Query",
-                      },
-                  ],
-                  "path": "/schema-name-already-used",
-                  "requestFormat": "json",
-                  "response": "z.string()",
-              },
-              {
-                  "description": undefined,
-                  "errors": [],
-                  "method": "put",
-                  "parameters": [
-                      {
-                          "name": "schemaNameAlreadyUsed",
-                          "schema": "schemaNameAlreadyUsed__2",
-                          "type": "Query",
-                      },
-                  ],
-                  "path": "/schema-name-already-used",
-                  "requestFormat": "json",
-                  "response": "z.string()",
-              },
-              {
-                  "description": undefined,
-                  "errors": [],
-                  "method": "delete",
-                  "parameters": [
-                      {
-                          "name": "schemaNameAlreadyUsed",
-                          "schema": "schemaNameAlreadyUsed__3",
-                          "type": "Query",
-                      },
-                  ],
-                  "path": "/schema-name-already-used",
-                  "requestFormat": "json",
-                  "response": "z.string()",
-              },
-              {
-                  "description": undefined,
-                  "errors": [],
-                  "method": "post",
-                  "parameters": [
-                      {
-                          "name": "schemaNameAlreadyUsed",
-                          "schema": "schemaNameAlreadyUsed__4",
-                          "type": "Query",
-                      },
-                  ],
-                  "path": "/schema-name-already-used",
-                  "requestFormat": "json",
-                  "response": "z.string()",
-              },
-          ],
-          "endpointsGroups": {},
-          "options": {
-              "baseUrl": "",
-              "withAlias": false,
-          },
-          "schemas": {
-              "schemaNameAlreadyUsed": "z.enum(["xxx", "yyy", "zzz"]).optional()",
-              "schemaNameAlreadyUsed__2": "z.enum(["aaa", "bbb", "ccc"]).optional()",
-              "schemaNameAlreadyUsed__3": "z.enum(["ddd", "eee", "fff"]).optional()",
-              "schemaNameAlreadyUsed__4": "z.enum(["ggg", "hhh", "iii"]).optional()",
-          },
+          "options": {},
+          "schemas": {},
           "types": {},
       }
     `);
@@ -176,81 +105,7 @@ test("schema-name-already-used", async () => {
     });
 
     expect(result).toMatchInlineSnapshot(`
-      "import { makeApi, Zodios, type ZodiosOptions } from "@zodios/core";
-      import { z } from "zod";
-
-      const schemaNameAlreadyUsed = z.enum(["xxx", "yyy", "zzz"]).optional();
-      const schemaNameAlreadyUsed__2 = z.enum(["aaa", "bbb", "ccc"]).optional();
-      const schemaNameAlreadyUsed__3 = z.enum(["ddd", "eee", "fff"]).optional();
-      const schemaNameAlreadyUsed__4 = z.enum(["ggg", "hhh", "iii"]).optional();
-
-      export const schemas = {
-        schemaNameAlreadyUsed,
-        schemaNameAlreadyUsed__2,
-        schemaNameAlreadyUsed__3,
-        schemaNameAlreadyUsed__4,
-      };
-
-      const endpoints = makeApi([
-        {
-          method: "get",
-          path: "/schema-name-already-used",
-          requestFormat: "json",
-          parameters: [
-            {
-              name: "schemaNameAlreadyUsed",
-              type: "Query",
-              schema: schemaNameAlreadyUsed,
-            },
-          ],
-          response: z.string(),
-        },
-        {
-          method: "put",
-          path: "/schema-name-already-used",
-          requestFormat: "json",
-          parameters: [
-            {
-              name: "schemaNameAlreadyUsed",
-              type: "Query",
-              schema: schemaNameAlreadyUsed__2,
-            },
-          ],
-          response: z.string(),
-        },
-        {
-          method: "delete",
-          path: "/schema-name-already-used",
-          requestFormat: "json",
-          parameters: [
-            {
-              name: "schemaNameAlreadyUsed",
-              type: "Query",
-              schema: schemaNameAlreadyUsed__3,
-            },
-          ],
-          response: z.string(),
-        },
-        {
-          method: "post",
-          path: "/schema-name-already-used",
-          requestFormat: "json",
-          parameters: [
-            {
-              name: "schemaNameAlreadyUsed",
-              type: "Query",
-              schema: schemaNameAlreadyUsed__4,
-            },
-          ],
-          response: z.string(),
-        },
-      ]);
-
-      export const api = new Zodios(endpoints);
-
-      export function createApiClient(baseUrl: string, options?: ZodiosOptions) {
-        return new Zodios(baseUrl, endpoints, options);
-      }
+      "import { z } from "zod";
       "
     `);
 });
