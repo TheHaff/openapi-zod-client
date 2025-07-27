@@ -201,7 +201,7 @@ export function getZodSchema({ schema: $schema, ctx, meta: inheritedMeta, option
                 .with("integer", () => "z.number()")
                 .with("string", () => {
                     // For string types with format, use the new Zod v4 top-level format methods
-                    if (schema.format && ["email", "hostname", "uri", "uri-reference", "uuid", "date-time", "date", "time"].includes(schema.format)) {
+                    if (schema.format && ["email", "hostname", "uri", "uri-reference", "uuid", "date-time", "date", "time", "emoji", "base64", "base64url", "nanoid", "cuid", "cuid2", "ulid", "ipv4", "ipv6", "cidrv4", "cidrv6", "duration"].includes(schema.format)) {
                         return match(schema.format)
                             .with("email", () => "z.email()")
                             .with("hostname", () => "z.url()")
@@ -211,6 +211,18 @@ export function getZodSchema({ schema: $schema, ctx, meta: inheritedMeta, option
                             .with("date-time", () => "z.iso.datetime()")
                             .with("date", () => "z.iso.date()")
                             .with("time", () => "z.iso.time()")
+                            .with("emoji", () => "z.emoji()")
+                            .with("base64", () => "z.base64()")
+                            .with("base64url", () => "z.base64url()")
+                            .with("nanoid", () => "z.nanoid()")
+                            .with("cuid", () => "z.cuid()")
+                            .with("cuid2", () => "z.cuid2()")
+                            .with("ulid", () => "z.ulid()")
+                            .with("ipv4", () => "z.ipv4()")
+                            .with("ipv6", () => "z.ipv6()")
+                            .with("cidrv4", () => "z.cidrv4()")
+                            .with("cidrv6", () => "z.cidrv6()")
+                            .with("duration", () => "z.iso.duration()")
                             .otherwise(() => "z.string()");
                     }
                     
@@ -415,7 +427,7 @@ const getZodChainableStringValidations = (schema: SchemaObject) => {
 
     if (schema.format) {
         // Skip format validations that are now handled at the top level in Zod v4
-        const topLevelFormats = ["email", "hostname", "uri", "uri-reference", "uuid", "date-time", "date", "time"];
+        const topLevelFormats = ["email", "hostname", "uri", "uri-reference", "uuid", "date-time", "date", "time", "emoji", "base64", "base64url", "nanoid", "cuid", "cuid2", "ulid", "ipv4", "ipv6", "cidrv4", "cidrv6", "duration"];
         if (!topLevelFormats.includes(schema.format)) {
             const chain = match(schema.format)
                 .with("date-time", () => "datetime({ offset: true })")
