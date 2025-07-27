@@ -199,11 +199,22 @@ export function getZodSchema({ schema: $schema, ctx, meta: inheritedMeta, option
         return code.assign(
             match(schemaType)
                 .with("integer", () => "z.number()")
-                .with("string", () =>
-                    match(schema.format)
+                .with("string", () => {
+                    // For string types with format, use the new Zod v4 top-level format methods
+                    if (schema.format && ["email", "hostname", "uri", "uuid", "date-time"].includes(schema.format)) {
+                        return match(schema.format)
+                            .with("email", () => "z.email()")
+                            .with("hostname", () => "z.url()")
+                            .with("uri", () => "z.url()")
+                            .with("uuid", () => "z.uuid()")
+                            .with("date-time", () => "z.iso.datetime()")
+                            .otherwise(() => "z.string()");
+                    }
+                    
+                    return match(schema.format)
                         .with("binary", () => "z.instanceof(File)")
-                        .otherwise(() => "z.string()")
-                )
+                        .otherwise(() => "z.string()");
+                })
                 .otherwise((type) => `z.${type}()`)
         );
     }
@@ -400,16 +411,16 @@ const getZodChainableStringValidations = (schema: SchemaObject) => {
     }
 
     if (schema.format) {
-        const chain = match(schema.format)
-            .with("email", () => "email()")
-            .with("hostname", () => "url()")
-            .with("uri", () => "url()")
-            .with("uuid", () => "uuid()")
-            .with("date-time", () => "datetime({ offset: true })")
-            .otherwise(() => "");
+        // Skip format validations that are now handled at the top level in Zod v4
+        const topLevelFormats = ["email", "hostname", "uri", "uuid", "date-time"];
+        if (!topLevelFormats.includes(schema.format)) {
+            const chain = match(schema.format)
+                .with("date-time", () => "datetime({ offset: true })")
+                .otherwise(() => "");
 
-        if (chain) {
-            validations.push(chain);
+            if (chain) {
+                validations.push(chain);
+            }
         }
     }
 
